@@ -6,12 +6,12 @@
 	"permissions": ["webRequest", "storage", "unlimitedStorage"],
 	"host_permissions": ["https://*.robinhood.com/*"],
 	"background": {
-    "service_worker": "./background.js"
+    "service_worker": "./static/js/background.js"
   },
 	"content_scripts": [
 		{
 			"matches": ["https://*.robinhood.com/*"],
-			"js": ["./content.js"]
+			"js": ["./static/js/content.js"]
 		}
 	],
   "action": {
