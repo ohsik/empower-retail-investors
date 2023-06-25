@@ -1,13 +1,17 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
+import '../app.css';
 
 const container = document.getElementById('app');
 
 function Popup() {
   return (
     <div>
-      <h1>Hot load popup!</h1>
+      <h1 className="text-2xl p-20 text-primary">
+        Hot load popup! Ready?
+      </h1>
     </div>
   );
 }
-render(<Popup />, container);
+createRoot(container!).render(<Popup />);
