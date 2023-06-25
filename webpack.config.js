@@ -7,7 +7,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
-  mode: 'production', // or 'development'
   entry: {
     bundle: path.resolve(__dirname, './src/app.tsx'),
     popup: path.resolve(__dirname, './src/popup/popup.tsx'),
