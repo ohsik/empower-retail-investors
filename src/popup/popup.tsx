@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client';
 import moment from 'moment';
 
 import { brokerages } from '../../lib/consts/brokerages';
+import { Button } from '../../lib/ui/button';
 
 import '../app.css';
-import { Button } from '../../lib/ui/button';
 
 const container = document.getElementById('popup');
 
@@ -21,7 +21,7 @@ function Popup() {
   }
 
   return (
-    <main className="grid w-[440px] p-10 items-center">
+    <main className="dark:bg-neutral-900 dark:text-white grid w-[440px] p-10 items-center">
       <h1 className="text-2xl font-bold">
         🚀 Empower Retail Investors
       </h1>

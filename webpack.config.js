@@ -4,18 +4,28 @@ const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
+  mode: 'production', // or 'development'
   entry: {
-    app: './src/app.tsx',
-    popup: './src/popup/popup.tsx',
+    bundle: path.resolve(__dirname, './src/app.tsx'),
+    popup: path.resolve(__dirname, './src/popup/popup.tsx'),
+    content: './src/chrome-services/content.ts',
     background: './src/chrome-services/background.ts',
-    content: './src/chrome-services/content.ts'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'static/js/[name].js',
+    filename: ({ chunk }) => {
+      if (chunk.name === 'bundle' || chunk.name === 'popup') {
+        return 'static/js/bundle.[contenthash].js';
+      }
+      return 'static/js/[name].js';
+    },
+    clean: true,
+    assetModuleFilename: '[name][ext]',
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -36,6 +46,13 @@ module.exports = {
           'postcss-loader',
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/images/[name][ext]',
+        },
+      },
     ]
   },
   plugins: [
@@ -45,13 +62,15 @@ module.exports = {
       chunks: ['popup'],
       inject: 'body',
       minify: true,
+      hash: true,
     }),
     new HtmlWebpackPlugin({
       template: './src/app.html',
       filename: 'app.html',
-      chunks: ['app'],
+      chunks: ['bundle'],
       inject: 'body',
       minify: true,
+      hash: true,
     }),
     new MiniCssExtractPlugin({
       filename: 'static/css/bundle.css',
@@ -62,6 +81,7 @@ module.exports = {
         { from: "public" },
       ],
     }),
+    // new BundleAnalyzerPlugin(),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -71,5 +91,15 @@ module.exports = {
       new CssMinimizerPlugin(),
       new TerserPlugin(),
     ],
-  },
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+          enforce: true,
+        }
+      }
+    }
+  }
 };
