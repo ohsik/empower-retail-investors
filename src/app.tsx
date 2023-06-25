@@ -7,11 +7,11 @@ const container = document.getElementById('app');
 
 function App() {
   return (
-    <div>
+    <main>
       <h1 className="text-3xl font-bold underline">
         Report App
       </h1>
-    </div>
+    </main>
   );
 }
 

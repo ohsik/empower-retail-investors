@@ -25,6 +25,9 @@ This project is based on Webpack + React setup from https://www.youtube.com/watc
 
 
 ```
+/lib
+  /const
+  /ui
 /src
   /chrome-services
   /popup

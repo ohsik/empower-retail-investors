@@ -13,6 +13,6 @@
     "noEmit": true
   },
   "include": [
-    "src"
+    "src", "lib",
   ]
 }
