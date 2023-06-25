@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "version": "0.0.1",
+  "name": "Empower retail investors",
+  "description": "Empowering retail investors by providing them with the right tools is crucial for enabling their participation and success in financial markets.",
+	"permissions": ["webRequest", "storage", "unlimitedStorage"],
+	"host_permissions": ["https://*.robinhood.com/*"],
+	"background": {
+    "service_worker": "./background.js"
+  },
+	"content_scripts": [
+		{
+			"matches": ["https://*.robinhood.com/*"],
+			"js": ["./content.js"]
+		}
+	],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "🚀 Empower retail investors",
+		"default_icon": {
+			"16": "images/empower-retail-investors-16.png",
+			"32": "images/empower-retail-investors-32.png",
+			"48": "images/empower-retail-investors-48.png",
+			"128": "images/empower-retail-investors-128.png"
+    }
+	},
+	"icons": {
+		"16": "images/empower-retail-investors-16.png",
+		"32": "images/empower-retail-investors-32.png",
+		"48": "images/empower-retail-investors-48.png",
+		"128": "images/empower-retail-investors-128.png"
+	}
+}

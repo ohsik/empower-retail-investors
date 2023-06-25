@@ -1,0 +1,1 @@
+console.log("this is chrome background.ts")
