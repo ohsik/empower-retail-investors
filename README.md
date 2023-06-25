@@ -17,17 +17,12 @@ Empowering retail investors by providing them with the right tools is crucial fo
 4. Import /dist folder in the Chrome extension page
 
 ## Dev setup
-**Next js / Typescript / Tailwind**
-
-
-## Dev issue
-Content Security Policy (CSP), a security mechanism implemented by web browsers to mitigate certain types of attacks, such as cross-site scripting (XSS).
+**React / Typescript / Tailwind**
 
 
 ## Project file structure
-This project is following Next v13 structure with;
-- pages/popup for the Chrome extension popup window
-- the main app/ will be the main report app
+This project is based on Webpack + React setup from https://www.youtube.com/watch?v=8OCEfOKzpAw
+
 
 ```
 /src
@@ -41,5 +36,3 @@ This project is following Next v13 structure with;
   manifest.json // Chrome extension manifest
   /images
 ```
-
-The build command will output chrome exrtension ready files to /out folder
