@@ -24,7 +24,7 @@ chrome.runtime.onConnect.addListener((port) => {
       chrome.storage.local.get(["authToken"], async ({ authToken }) => {
         console.log({authToken})
         // Just send fetch successful reponse back to popup.tsx
-        // const reponse = await getUserData(authToken)
+        // const reponse = await getUserData(authToken, brokerage)
         
         // if(reponse) {
         //   port.postMessage(reponse);

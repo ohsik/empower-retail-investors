@@ -1,4 +1,4 @@
-export enum Brokerages {
+enum Brokerages {
   Robinhood = 'robinhood',
   Thinkorswim = 'thinkorswim',
   Etrade = 'etrade',
@@ -8,7 +8,7 @@ export enum Brokerages {
   Fidelity = 'fidelity',
 }
 
-export type BrokerageNames = Record<Brokerages, string>;
+type BrokerageNames = Record<Brokerages, string>;
 
 export const brokerageNames: BrokerageNames = {
   [Brokerages.Robinhood]: 'Robinhood',
