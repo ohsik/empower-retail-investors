@@ -9,7 +9,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
   entry: {
     bundle: path.resolve(__dirname, './src/app.tsx'),
-    popup: path.resolve(__dirname, './src/popup/popup.tsx'),
+    popup: path.resolve(__dirname, './src/popup/index.tsx'),
     content: './src/chrome-services/content.ts',
     background: './src/chrome-services/background.ts',
   },

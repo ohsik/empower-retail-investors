@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "name": "Empower retail investors",
   "description": "Empowering retail investors by providing them with the right tools is crucial for enabling their participation and success in financial markets.",
-	"permissions": ["webRequest", "storage", "unlimitedStorage"],
+	"permissions": ["webRequest", "storage", "unlimitedStorage", "tabs"],
 	"host_permissions": ["https://*.robinhood.com/*"],
 	"background": {
     "service_worker": "./static/js/background.js"

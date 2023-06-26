@@ -1,23 +1,35 @@
 export enum Brokerages {
-  robinhood = 'Robinhood',
-  thinkorswim = 'Thinkorswim',
-  etrade = 'E-Trade',
-  interactiveBrokers = 'Interactive Brokers',
-  webull = 'Webull',
-  charlesSchwab = 'Charles Schwab',
-  fidelity = 'Fidelity',
+  Robinhood = 'robinhood',
+  Thinkorswim = 'thinkorswim',
+  Etrade = 'etrade',
+  InteractiveBrokers = 'interactiveBrokers',
+  Webull = 'webull',
+  CharlesSchwab = 'charlesSchwab',
+  Fidelity = 'fidelity',
 }
 
-export const brokerages = {
-  robinhood: Brokerages.robinhood,
-  thinkorswim: Brokerages.thinkorswim,
-  etrade: Brokerages.etrade,
-  interactiveBrokers: Brokerages.interactiveBrokers,
-  webull: Brokerages.webull,
-  charlesSchwab: Brokerages.charlesSchwab,
-  fidelity: Brokerages.fidelity,
-}
+export type BrokerageNames = Record<Brokerages, string>;
 
-export const supportedBrokerages = {
-  robinhood: Brokerages.robinhood,
-}
+export const brokerageNames: BrokerageNames = {
+  [Brokerages.Robinhood]: 'Robinhood',
+  [Brokerages.Thinkorswim]: 'Thinkorswim',
+  [Brokerages.Etrade]: 'E-Trade',
+  [Brokerages.InteractiveBrokers]: 'Interactive Brokers',
+  [Brokerages.Webull]: 'Webull',
+  [Brokerages.CharlesSchwab]: 'Charles Schwab',
+  [Brokerages.Fidelity]: 'Fidelity',
+};
+
+export const brokerageUrls = {
+  [Brokerages.Robinhood]: 'robinhood.com',
+  [Brokerages.Thinkorswim]: 'thinkorswim.com',
+  [Brokerages.Etrade]: 'etrade.com',
+  [Brokerages.InteractiveBrokers]: 'interactivebrokers.com',
+  [Brokerages.Webull]: 'webull.com',
+  [Brokerages.CharlesSchwab]: 'charlesschwab.com',
+  [Brokerages.Fidelity]: 'fidelity.com',
+} as const;
+
+export const supportedBrokerages: Array<Brokerages> = [
+  Brokerages.Robinhood,
+];
