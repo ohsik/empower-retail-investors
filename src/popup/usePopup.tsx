@@ -28,7 +28,7 @@ const port = chrome.runtime.connect();
 export function usePopup(): UsePopupReturns {
   const [isSyncing, setIsSyncing] = useState(false)
   const [isFetchDataExist, setIsFetchDataExist] = useState(false)
-  const [syncedTime, setSyncedTime] = useState('')
+  const [syncedTime, setSyncedTime] = useState<string>('')
   const [syncErrorMessage, setSyncErrorMessage] = useState(null)
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
   const [currentBrokage, setCurrentBrokage] = useState<keyof typeof brokerageUrls | undefined>(undefined);
@@ -38,10 +38,11 @@ export function usePopup(): UsePopupReturns {
     // Check if the fetchedData exists already
     chrome.storage.local.get((items) => {
       const allKeys = Object.keys(items);
-      setIsFetchDataExist(allKeys.some((k) => k === localFetchedDataName(currentBrokage)))
+      const currentBrokageDataKey = localFetchedDataName(currentBrokage);
+      setIsFetchDataExist(allKeys.some((k) => k === currentBrokageDataKey))
 
-      if(items?.fetchedData?.timeSynced) {
-        setSyncedTime(items.fetchedData.timeSynced)
+      if(currentBrokage) {
+        setSyncedTime(items[currentBrokageDataKey].timeSynced)
       }
     });
 
@@ -53,7 +54,7 @@ export function usePopup(): UsePopupReturns {
     }
 
     setCurrentBrokerage();
-  }, [currentBrokage])
+  }, [currentBrokage, currentUrl])
 
   function syncData() {
     setIsSyncing(true)
