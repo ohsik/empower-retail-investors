@@ -20,8 +20,8 @@ export function Popup(): JSX.Element {
 
   return (
     <main className="dark:bg-neutral-900 dark:text-white grid w-[440px] p-10 items-center">
-      <h1 className="text-2xl font-bold">
-        🚀 Empower Retail Investors
+      <h1 className="text-2xl font-bold text-primary">
+        <span className='mr-2 text-2xl'>🚀</span> Empower Retail Investors
       </h1>
       <p className="text-base my-2">
       {currentBrokage
@@ -37,12 +37,12 @@ export function Popup(): JSX.Element {
       {/* Error messages */}
       {(!currentBrokage || !isCurrentBrokageSupported) && 
         <p className="text-xs italic my-1 break-all">
-          {currentBrokage && brokerageNames[currentBrokage]}({currentUrl}) is not supported at the moment
+          {currentBrokage && brokerageNames[currentBrokage]}({currentUrl}) <b>is not supported at the moment</b>
         </p>
       }
 
       {syncErrorMessage && 
-        <p className="text-xs italic my-1">{`${syncErrorMessage} Please login to Robinhood and try again.`}</p>
+        <p className="text-xs italic my-1">{`${syncErrorMessage} Please login to ${currentBrokage} and try again.`}</p>
       }
 
       {isCurrentBrokageSupported && currentBrokage && !syncErrorMessage && 

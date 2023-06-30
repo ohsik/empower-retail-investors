@@ -3,14 +3,14 @@ import { createRoot } from 'react-dom/client';
 
 import './app.css';
 
-import { Dashboard } from './dashboard';
+import { Home } from './dashboard';
 
 const container = document.getElementById('app');
 
 function App() {
   return (
     <main>
-      <Dashboard />
+      <Home />
     </main>
   );
 }

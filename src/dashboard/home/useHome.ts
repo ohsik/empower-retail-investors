@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useDashboard() {
+export function useHome() {
   const [fetchedData, setFetchedData] = useState<any>();
 
   useEffect(() => {
