@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { brokerageUrls, supportedBrokerages } from '../../lib/consts/brokerages';
+import { brokerageUrls } from '../../lib/consts/brokerages';
+import { getCurrentBrokerage } from '../../lib/helpers/get-current-brokerage';
+import { localFetchedDataName } from '../../lib/consts/local-storage-var';
 
 type UsePopupReturns = {
   syncData: () => void;
@@ -13,6 +15,13 @@ type UsePopupReturns = {
   isCurrentBrokageSupported: boolean;
 };
 
+type FetchUserDataTypes = {
+  FETCH_USER_DATA: {
+    brokerage: keyof typeof brokerageUrls;
+    url: string;
+  }
+};
+
 // Establish connection so popup can communicate with background
 const port = chrome.runtime.connect();
 
@@ -22,49 +31,47 @@ export function usePopup(): UsePopupReturns {
   const [syncedTime, setSyncedTime] = useState('')
   const [syncErrorMessage, setSyncErrorMessage] = useState(null)
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
-
-  const currentBrokage = (Object.keys(brokerageUrls) as Array<keyof typeof brokerageUrls>).find((brokerage) => currentUrl?.includes(brokerageUrls[brokerage]));
-  const isCurrentBrokageSupported = supportedBrokerages.includes(currentBrokage as keyof typeof brokerageUrls);
+  const [currentBrokage, setCurrentBrokage] = useState<keyof typeof brokerageUrls | undefined>(undefined);
+  const [isCurrentBrokageSupported, setIsCurrentBrokageSupported] = useState<boolean>(false);
 
   useEffect(() => {
     // Check if the fetchedData exists already
     chrome.storage.local.get((items) => {
       const allKeys = Object.keys(items);
-      setIsFetchDataExist(allKeys.some((k) => k === `${currentBrokage}+fetchedData`))
+      setIsFetchDataExist(allKeys.some((k) => k === localFetchedDataName(currentBrokage)))
 
       if(items?.fetchedData?.timeSynced) {
         setSyncedTime(items.fetchedData.timeSynced)
       }
     });
 
-    // Get the current tab url
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs.length > 0) {
-        const tabUrl = tabs[0].url;
-        setCurrentUrl(tabUrl ?? null)
-      }
-    });
-  }, [])
+    async function setCurrentBrokerage() {
+      const { currentUrl, currentBrokage, isCurrentBrokageSupported } = await getCurrentBrokerage();
+      setCurrentUrl(currentUrl)
+      setCurrentBrokage(currentBrokage)
+      setIsCurrentBrokageSupported(isCurrentBrokageSupported)
+    }
+
+    setCurrentBrokerage();
+  }, [currentBrokage])
 
   function syncData() {
     setIsSyncing(true)
-    port.postMessage(
-      {
-        FETCH_USER_DATA: {
-          brokerage: currentBrokage,
-          url: brokerageUrls[currentBrokage as keyof typeof brokerageUrls],
-        }
+
+    const fetchUserData: FetchUserDataTypes = {
+      FETCH_USER_DATA: {
+        brokerage: currentBrokage as keyof typeof brokerageUrls,
+        url: brokerageUrls[currentBrokage as keyof typeof brokerageUrls],
       }
-    );
+    }
+
+    port.postMessage(fetchUserData);
     
     port.onMessage.addListener((message)=>  {
       if(message && !message.error) {
+        setSyncedTime(message[`fetchedData-robinhood`].timeSynced)
         setIsFetchDataExist(true)
         setIsSyncing(false)
-  
-        // Adding a hack cause it does not read updated date from fetchedData
-        const timeSynced = new Date();
-        setSyncedTime(timeSynced.toISOString())
       } else {
         setSyncErrorMessage(message.error)
         setIsSyncing(false)

@@ -1,4 +1,4 @@
-enum Brokerages {
+export enum Brokerages {
   Robinhood = 'robinhood',
   Thinkorswim = 'thinkorswim',
   Etrade = 'etrade',
@@ -22,7 +22,7 @@ export const brokerageNames: BrokerageNames = {
 
 export const brokerageUrls = {
   [Brokerages.Robinhood]: 'robinhood.com',
-  [Brokerages.Thinkorswim]: 'thinkorswim.com',
+  [Brokerages.Thinkorswim]: 'tdameritrade.com',
   [Brokerages.Etrade]: 'etrade.com',
   [Brokerages.InteractiveBrokers]: 'interactivebrokers.com',
   [Brokerages.Webull]: 'webull.com',
@@ -32,4 +32,5 @@ export const brokerageUrls = {
 
 export const supportedBrokerages: Array<Brokerages> = [
   Brokerages.Robinhood,
+  // Brokerages.Webull
 ];
