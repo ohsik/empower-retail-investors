@@ -8,7 +8,7 @@ export function Home() {
   console.log(fetchedData)
 
   return (
-    <div className="grid grid-cols-[200px,1fr] gap-4 text-sm">
+    <div className="grid grid-cols-[220px,1fr] gap-4 text-sm">
       <div>
         <Sidebar />
       </div>

@@ -23,11 +23,12 @@ export function Popup(): JSX.Element {
       <h1 className="text-2xl font-bold text-primary">
         <span className='mr-2 text-2xl'>🚀</span> Empower Retail Investors
       </h1>
-      <p className="text-base my-2">
-      {currentBrokage
-        ? `Sync your trading history data from ${brokerageNames[currentBrokage]}`
-        : "This extension can only be used on US stock brokerage websites"}  
-      </p>
+      <div className="text-base my-2">
+        {currentBrokage
+          ? `Sync your trading history data from ${brokerageNames[currentBrokage]}`
+          : <p>This extension is exclusively designed for <i>US stock exchange brokerage</i> websites.</p>
+        }
+      </div>
       
       <div className="my-3 grid grid-cols-2 gap-2">
         <Button onClick={syncData} children={`Sync data`} loading={isSyncing} disabled={!currentBrokage || !isCurrentBrokageSupported} />

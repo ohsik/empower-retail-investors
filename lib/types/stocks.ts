@@ -1,6 +1,10 @@
-interface Stock {
+export interface Stock {
+  id: string;
   symbol: string;
   price: number;
-  volume: number;
-  date: string;
+  quantity: number;
+  fees: number;
+  side: string;
+  excutionDate: string;
+  profitOrLoss?: number;
 }

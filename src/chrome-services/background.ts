@@ -48,7 +48,7 @@ getCurrentTab().then(tab => {
 
 
 /*
-  TODO: From here, this can be brokerage specific file. May need to move to different file.
+  TODO: From here, this can be brokerage specific file. May need to move to different file(if I can't get/use authorization token to get data).
   Only works with Robinhood for now. since it can grab authentication token from the request headers and use it to fetch data.
 
   Getting the authToken from the request headers.
