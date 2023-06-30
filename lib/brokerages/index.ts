@@ -8,7 +8,7 @@ type BrokeragesUrls = {
     endpoints: {
       [key: string]: string;
     }
-    getUserData: (currentBrokage: string | undefined, authToken?: string) => Promise<any>; // TODO: update any
+    getUserData: (currentBrokage: Brokerages | undefined, authToken?: string) => Promise<any>; // TODO: update any
   }
 };
 
