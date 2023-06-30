@@ -4,7 +4,7 @@ export interface Crypto {
   price: number;
   quantity: number;
   fees: number;
-  side: string;
-  excutionDate: string;
+  side: 'buy' | 'sell';
+  executionDate: string;
   profitOrLoss?: number;
 }

@@ -3,11 +3,14 @@ export interface Option {
   symbol: string;
   price: number;
   quantity: number;
-  direction: string; // debit | credit
-  option_type: string; // call | put
-  position_effect: string;  // open | close
-  side: string; // buy | sell
+  direction: 'debit' | 'credit';
+  option_type: 'call' | 'put';
+  position_effect: 'open' | 'close';
+  side: 'buy' | 'sell';
   fees: number;
-  excutionDate: string;
+  strikePrice: number;
+  premium: number;
+  expirationDate: string;
+  executionDate: string;
   profitOrLoss?: number;
 }
