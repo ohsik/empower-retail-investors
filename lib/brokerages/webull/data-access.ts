@@ -1,4 +1,6 @@
 import { BROKERAGES_VARS } from "..";
+import { Brokerages } from "../../consts/brokerages";
+import { localFetchedDataName } from "../../consts/local-storage-var";
 import { requestHeaders } from "../../helpers/request-headers";
 
 // TODO: Promise<void> should have typed return data
@@ -38,7 +40,7 @@ async function fetchData(authToken: string, endpoint: string, allOrders: any[] =
   }
 }
 
-export async function getUserData(currentBrokage: string | undefined, authToken: string = '') {
+export async function getUserData(currentBrokage: Brokerages | undefined, authToken: string = '') {
   if(!currentBrokage) {
     throw Error('No current brokerage')
   }
@@ -57,7 +59,7 @@ export async function getUserData(currentBrokage: string | undefined, authToken:
   const timeSynced = new Date();
 
   const allData = {
-    [`fetchedData-${currentBrokage}`]: {
+    [localFetchedDataName(currentBrokage)]: {
       data: Object.assign({}, ...fetchedData),
       timeSynced: timeSynced.toISOString()
     }    

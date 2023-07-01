@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { Header } from "../components/header";
 import { Summary } from "../components/summary";
-import { Table } from "../components/table";
+import { SelectedDataContext } from '../../context';
 
 type PortfolioProps = {
-  title: string;
 }
 
-export function Portfolio({ title }: PortfolioProps): JSX.Element {
+export function Portfolio({}: PortfolioProps): JSX.Element {
+  const { selectedBrokerage } = useContext(SelectedDataContext);
+  
   return (
-    <div className="p-10">
-      <Header title={title} />
+    <div>
       <Summary />
+      {selectedBrokerage}
     </div>
   )
 }

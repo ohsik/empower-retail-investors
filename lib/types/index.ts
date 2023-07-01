@@ -18,3 +18,7 @@ export interface Data {
   fees?: Fee[];
   timeSynced?: string;
 }
+
+export interface AllData {
+  [key: string]: Data;
+};

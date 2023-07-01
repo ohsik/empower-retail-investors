@@ -1,10 +1,15 @@
 import React from "react";
+import { AllData } from "../../../../../lib/types";
 
-export function Table(): JSX.Element {
+type TableProps = {
+  data: AllData | undefined;
+}
+
+export function Table({ data }: TableProps): JSX.Element {
   return (
     <table className="w-full rounded">
       <thead>
-        <tr className="text-xxs text-left border-b uppercase">
+        <tr className="text-xxs text-left border-b border-slate-500 border-opacity-40 uppercase">
           <th className="p-4">Symbol</th>
           <th className="p-4">Quantity</th>
           <th className="p-4">Price</th>
@@ -15,33 +20,19 @@ export function Table(): JSX.Element {
         </tr>
       </thead>
       <tbody>
-        <tr className="border-b">
-          <td className="p-4">APPL</td>
-          <td className="p-4">100</td>
-          <td className="p-4">$190.22</td>
-          <td className="p-4">Buy</td>
-          <td className="p-4">$0</td>
-          <td className="p-4">Jun 30, 2023</td>
-          <td className="p-4">$0</td>
-        </tr>
-        <tr className="border-b">
-          <td className="p-4">APPL</td>
-          <td className="p-4">100</td>
-          <td className="p-4">$190.22</td>
-          <td className="p-4">Buy</td>
-          <td className="p-4">$0</td>
-          <td className="p-4">Jun 30, 2023</td>
-          <td className="p-4">$0</td>
-        </tr>
-        <tr className="border-b">
-          <td className="p-4">APPL</td>
-          <td className="p-4">100</td>
-          <td className="p-4">$190.22</td>
-          <td className="p-4">Buy</td>
-          <td className="p-4">$0</td>
-          <td className="p-4">Jun 30, 2023</td>
-          <td className="p-4">$0</td>
-        </tr>
+        {data && data.robinhood && data.robinhood.stocks && data.robinhood.stocks.map((trade) => {
+         return (
+          <tr className="border-b border-slate-500 border-opacity-40" key={trade.id} id={trade.id}>
+            <td className="p-4">{trade.symbol}</td>
+            <td className="p-4">{trade.quantity}</td>
+            <td className="p-4">{trade.price}</td>
+            <td className="p-4">{trade.side}</td>
+            <td className="p-4">{trade.fees}</td>
+            <td className="p-4">{trade.executionDate}</td>
+            <td className="p-4">{trade.profitOrLoss ?? 0}</td>
+          </tr>
+         )
+        })}
       </tbody>
     </table>
   )

@@ -1,23 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 import { Brokerages, brokerageNames } from "../../../lib/consts/brokerages";
+import { SelectedDataContext } from "../context";
+import { sidebarMenu } from "../../../lib/consts/sidebar-menu";
 
 type SidebarProps = {
   availableBrokerages: Brokerages[] | undefined;
 };
 
-export const sidebarManu = [
-  { key: 'portfolio', name: '💼 Portfolio', url: `/` },
-  { key: 'stocks', name: '📈 Stocks', url: `/stocks` },
-  { key: 'options', name: '⏳ Options', url: `/options` },
-  { key: 'crypto', name: '🌎 Crypto', url: `/crypto` },
-  { key: 'dividends', name: '💵 Dividends', url: `/dividends` },
-  { key: 'subscriptionFees', name: '💸 Subscription fees', url: `/subscription-fees` },
-  { key: 'marginInterest', name: '💳 Margin interest', url: `/margin-interest` },
-  { key: 'about', name: '😻 About', url: `/about` }
-];
-
 export function Sidebar({ availableBrokerages }: SidebarProps ): JSX.Element {
+  const navigate = useNavigate();
+  const { selectedBrokerage, selectedTimeDuration } = useContext(SelectedDataContext);
+
   return (
     <div className="p-10">
       <div className="mb-6 font-bold text-lg text-primary mt-[-10px]">
@@ -26,7 +22,12 @@ export function Sidebar({ availableBrokerages }: SidebarProps ): JSX.Element {
       </div>
 
       <div className="mb-6">
-        <select id="brokerageSelect" className="border rounded p-2 w-[140px] dark:bg-neutral-900 dark:text-slate-300">
+        <select 
+          id="brokerageSelect" 
+          className="border rounded p-2 w-[140px] bg-primary hover:bg-primary-dark text-slate-100"
+          value={selectedBrokerage}
+          onChange={(e) => navigate(`?brokerage=${e.target.value}&timeduration=${selectedTimeDuration}`)}
+        >
           {availableBrokerages?.map((brokerage) => (
             <option key={brokerage} value={brokerage}>
               {brokerageNames[brokerage]}
@@ -35,9 +36,11 @@ export function Sidebar({ availableBrokerages }: SidebarProps ): JSX.Element {
         </select>
       </div>
 
-      {sidebarManu.map((item, index) => (
+      {sidebarMenu.map((item, index) => (
         <li className="list-none my-3 underline" key={index}>
-          <Link to={item.url}>{item.name}</Link>
+          <Link to={`${item.url}?brokerage=${selectedBrokerage}&timeduration=${selectedTimeDuration}`}>
+            {item.name}
+          </Link>
         </li>
       ))}
     </div>

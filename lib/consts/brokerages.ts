@@ -1,4 +1,5 @@
 export enum Brokerages {
+  All = 'all',
   Robinhood = 'robinhood',
   Thinkorswim = 'thinkorswim',
   Etrade = 'etrade',
@@ -11,6 +12,7 @@ export enum Brokerages {
 type BrokerageNames = Record<Brokerages, string>;
 
 export const brokerageNames: BrokerageNames = {
+  [Brokerages.All]: 'All Brokerages',
   [Brokerages.Robinhood]: 'Robinhood',
   [Brokerages.Thinkorswim]: 'Thinkorswim',
   [Brokerages.Etrade]: 'E-Trade',

@@ -70,7 +70,7 @@ export function usePopup(): UsePopupReturns {
     
     port.onMessage.addListener((message)=>  {
       if(message && !message.error) {
-        setSyncedTime(message[`fetchedData-robinhood`].timeSynced)
+        setSyncedTime(message[localFetchedDataName(currentBrokage)].timeSynced)
         setIsFetchDataExist(true)
         setIsSyncing(false)
       } else {

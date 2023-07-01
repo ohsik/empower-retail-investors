@@ -1,19 +1,18 @@
 import React from 'react';
 
-import { Header } from "../components/header";
 import { Summary } from "../components/summary";
 import { Table } from "../components/table";
+import { AllData } from '../../../../lib/types';
 
 type StocksProps = {
-  title: string;
+  data: AllData | undefined;
 }
 
-export function Stocks({ title }: StocksProps): JSX.Element {
+export function Stocks({ data }: StocksProps): JSX.Element {
   return (
-    <div className="p-10">
-      <Header title={title} />
+    <div>
       <Summary />
-      <Table />
+      <Table data={data} />
     </div>
   )
 }
