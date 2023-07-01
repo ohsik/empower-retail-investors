@@ -10,7 +10,7 @@ type ButtonProps = {
 
 export function Button ({ onClick, children, loading, disabled }: ButtonProps): JSX.Element {
   return (
-    <button className="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-3xl w-full text-sm disabled:bg-gray-400" onClick={onClick} disabled={disabled ? disabled : loading}>
+    <button className="bg-primary hover:bg-primary-dark text-slate-300 py-2 px-4 rounded-3xl w-full text-sm disabled:bg-gray-400" onClick={onClick} disabled={disabled ? disabled : loading}>
       {loading ? <LoadingSpinner /> : children}
     </button>
   )

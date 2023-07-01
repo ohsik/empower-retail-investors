@@ -19,7 +19,7 @@ export function Popup(): JSX.Element {
   } = usePopup();
 
   return (
-    <main className="dark:bg-neutral-900 dark:text-white grid w-[440px] p-10 items-center">
+    <main className="dark:bg-neutral-900 dark:text-slate-300 grid w-[440px] p-10 items-center">
       <h1 className="text-2xl font-bold text-primary">
         <span className='mr-2 text-2xl'>🚀</span> Empower Retail Investors
       </h1>

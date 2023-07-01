@@ -1,0 +1,1 @@
+export { Dividends } from './dividends';

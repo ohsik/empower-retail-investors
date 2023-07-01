@@ -7,6 +7,8 @@ module.exports = {
   theme: {
     extend: {
       fontSize: {
+        'xxs': '10px',
+        'xs': '12px',
         'sm': '14px',
         'md': '16px',
         'lg': '18px',
@@ -16,6 +18,12 @@ module.exports = {
         'primary-dark': '#B117CA',
         'primary-light': '#E5B3FF',
         'secondary': '#FFC500',
+      },
+      borderOpacity: {
+        DEFAULT: '0.2',
+      },
+      borderWidth: {
+        DEFAULT: '0.4px',
       }
     },
   },
