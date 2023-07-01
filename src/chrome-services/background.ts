@@ -1,4 +1,4 @@
-import { BROKERAGES_URLS } from "../../lib/brokerages";
+import { BROKERAGES_VARS } from "../../lib/brokerages";
 import { Brokerages, brokerageUrls } from "../../lib/consts/brokerages";
 import { localAuthTokenName } from "../../lib/consts/local-storage-var";
 /*
@@ -27,7 +27,6 @@ function getCurrentBrokerage(currentUrl: string | null | undefined) {
 chrome.tabs.onActivated.addListener(async () => {
   currentTab = await getCurrentTab();
   currentBrokerage = getCurrentBrokerage(currentTab.url);
-  console.log(currentTab.url, currentBrokerage);
 });
 
 // Event listener for tab URL change
@@ -35,7 +34,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (tab.active && changeInfo.url) {
     currentTab = tab;
     currentBrokerage = getCurrentBrokerage(currentTab.url);
-    console.log(currentTab.url, currentBrokerage);
   }
 });
 
@@ -43,7 +41,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 getCurrentTab().then(tab => {
   currentTab = tab;
   currentBrokerage = getCurrentBrokerage(currentTab.url);
-  console.log(currentTab.url, currentBrokerage);
 });
 
 
@@ -71,7 +68,7 @@ function getAuthToken(details: any){
 // Grab authentication token from the request headers
 chrome.webRequest.onBeforeSendHeaders.addListener(getAuthToken, 
   { 
-    urls: currentBrokerage ? BROKERAGES_URLS[currentBrokerage]?.getAuthTokenUrls : [],
+    urls: currentBrokerage ? BROKERAGES_VARS[currentBrokerage]?.getAuthTokenUrls : [],
     types: ["xmlhttprequest"]
   },
   ["requestHeaders", "extraHeaders"]
@@ -87,7 +84,7 @@ chrome.runtime.onConnect.addListener((port) => {
         });
       });
 
-      const reponse = currentBrokerage && await BROKERAGES_URLS[currentBrokerage]?.getUserData(currentBrokerage, authToken);
+      const reponse = currentBrokerage && await BROKERAGES_VARS[currentBrokerage]?.getUserData(currentBrokerage, authToken);
 
       if(reponse) {
         port.postMessage(reponse);

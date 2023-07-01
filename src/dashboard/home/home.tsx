@@ -2,10 +2,10 @@ import React from 'react';
 import { useHome } from './useHome';
 import { Sidebar } from '../sidebar';
 import { Content } from '../content';
+import { RocketLoading } from '../../../lib/ui/loading-rocket';
 
 export function Home() {
-  const { fetchedData } = useHome();
-  console.log(fetchedData)
+  const { data, isLoading } = useHome();
 
   return (
     <div className="grid grid-cols-[220px,1fr] gap-4 text-sm">
@@ -14,7 +14,7 @@ export function Home() {
       </div>
       
       <div>
-        <Content data={fetchedData} />
+        {isLoading ? <RocketLoading /> : <Content data={data} />}
       </div>
     </div>
   )

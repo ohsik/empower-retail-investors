@@ -1,4 +1,4 @@
-import { BROKERAGES_URLS } from "..";
+import { BROKERAGES_VARS } from "..";
 import { Brokerages } from "../../consts/brokerages";
 import { localFetchedDataName } from "../../consts/local-storage-var";
 import { requestHeaders } from "../../helpers/request-headers";
@@ -50,7 +50,7 @@ export async function getUserData(currentBrokage: Brokerages | undefined, authTo
   }
 
   const fetchedData = await Promise.all(
-    Object.entries(BROKERAGES_URLS[currentBrokage].endpoints).map(async ([key, value]) => {
+    Object.entries(BROKERAGES_VARS[currentBrokage].endpoints).map(async ([key, value]) => {
       const data = await fetchData(authToken, value)
       return { [key]: data };
     })

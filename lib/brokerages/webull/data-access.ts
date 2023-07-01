@@ -1,4 +1,4 @@
-import { BROKERAGES_URLS } from "..";
+import { BROKERAGES_VARS } from "..";
 import { requestHeaders } from "../../helpers/request-headers";
 
 // TODO: Promise<void> should have typed return data
@@ -48,7 +48,7 @@ export async function getUserData(currentBrokage: string | undefined, authToken:
   }
 
   const fetchedData = await Promise.all(
-    Object.entries(BROKERAGES_URLS[currentBrokage].endpoints).map(async ([key, value]) => {
+    Object.entries(BROKERAGES_VARS[currentBrokage].endpoints).map(async ([key, value]) => {
       const data = await fetchData(authToken, value)
       return { [key]: data };
     })
