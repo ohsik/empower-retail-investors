@@ -2,8 +2,8 @@ import { BROKERAGES_VARS } from "..";
 import { Brokerages } from "../../consts/brokerages";
 import { localFetchedDataName } from "../../consts/local-storage-var";
 import { requestHeaders } from "../../helpers/request-headers";
+import { getSymbols } from "./helpers/get-symbol";
 
-// TODO: Promise<void> should have typed return data
 async function fetchData(authToken: string, endpoint: string, allOrders: any[] = []): Promise<void> {
   try {
     const reponse = await fetch(endpoint, {
@@ -55,16 +55,35 @@ export async function getUserData(currentBrokage: Brokerages | undefined, authTo
       return { [key]: data };
     })
   );
-  
+
+  // because Robinhood doesn't provide the symbol in the orders endpoint, we need to fetch it for each order
+  async function getAndAssignSymbols(fetchedData: any) {
+    const dataFormatted = Object.assign({}, ...fetchedData);
+
+    await Promise.all(
+      dataFormatted.orders.results.map(async (trade: any, index: string | number) => {
+        const symbol = await getSymbols(trade.instrument);
+
+        dataFormatted.orders.results[index] = {
+          ...dataFormatted.orders.results[index],
+          symbol: symbol?.symbol,
+          companyName: symbol?.name,
+        }
+      })
+    );
+
+    return dataFormatted;
+  }
+
   const timeSynced = new Date();
 
   const allData = {
     [localFetchedDataName(currentBrokage)]: {
-      data: Object.assign({}, ...fetchedData),
+      data: await getAndAssignSymbols(fetchedData),
       timeSynced: timeSynced.toISOString()
     }    
   }
-  
+
   if(allData) {
     chrome.storage.local.set(allData)
     return allData

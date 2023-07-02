@@ -24,7 +24,7 @@ export function Sidebar({ availableBrokerages }: SidebarProps ): JSX.Element {
       <div className="mb-6">
         <select 
           id="brokerageSelect" 
-          className="border rounded p-2 w-[140px] bg-primary hover:bg-primary-dark text-slate-100"
+          className="rounded p-2 w-[140px] bg-primary hover:bg-primary-dark text-slate-100"
           value={selectedBrokerage}
           onChange={(e) => navigate(`?brokerage=${e.target.value}&timeduration=${selectedTimeDuration}`)}
         >

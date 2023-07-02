@@ -1,21 +1,27 @@
 interface GetStockSymbolReturn {
-  [instrument: string]: {
-    symbol: string;
-    name: string;
-  }
-}
+  symbol: string;
+  name: string;
+};
 
-export async function getSymbol(instrument: string): Promise<GetStockSymbolReturn> {
+interface GetStockSymbolType {
+  [instrument: string]: GetStockSymbolReturn;
+};
+
+let allSymbols: GetStockSymbolType = {};
+
+export async function getSymbols(instrument: string): Promise<GetStockSymbolReturn> {
   
-  // Make map of all symbols and names
+  if (!allSymbols[instrument]) {
+    const response = await fetch(instrument);
+    const data = await response.json();
 
-  const response = await fetch(instrument);
-  const data = await response.json();
-
-  return {
-    [instrument]: {
+    const symbolData: GetStockSymbolReturn = {
       symbol: data.symbol,
-      name: data.name
-    }
-  };
+      name: data.name,
+    };
+
+    allSymbols[instrument] = symbolData;
+  }
+
+  return allSymbols[instrument];
 }

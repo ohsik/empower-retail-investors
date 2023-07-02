@@ -13,7 +13,7 @@ export function dataTransform(fetchedData: any): Data {
   const stocks: Stock[] = fetchedData.data.orders.results.map((stock: any) => {
     return {
       id: stock.id,
-      symbol: stock.instrument,
+      symbol: stock.symbol ?? stock.instrument,
       price: stock.average_price ?? stock.price,
       quantity: stock.quantity,
       fees: stock.fees,
@@ -21,6 +21,18 @@ export function dataTransform(fetchedData: any): Data {
       executionDate: stock.updated_at
     };
   });
+
+  // Options data transformation
+
+  // Crypto data transformation
+
+  // Dividends data transformation
+
+  // Margin interest data transformation
+
+  // Subscription fees data transformation
+
+  // user data transformation
   
   return {
     stocks: stocks,
