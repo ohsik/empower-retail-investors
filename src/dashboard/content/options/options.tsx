@@ -1,16 +1,18 @@
 import React from 'react';
 
 import { Summary } from "../components/summary";
-import { Table } from "../components/table";
+import { Table } from "./table";
+import { AllData } from '../../../../lib/types';
 
 type OptionsProps = {
+  data: AllData | undefined;
 }
 
-export function Options({}: OptionsProps): JSX.Element {
+export function Options({ data }: OptionsProps): JSX.Element {
   return (
     <div>
       <Summary />
-      <Table data={undefined} />
+      <Table data={data?.robinhood.options} />
     </div>
   )
 }

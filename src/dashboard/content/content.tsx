@@ -15,17 +15,15 @@ type ContentProps = {
 }
 
 export function Content({ data }: ContentProps): JSX.Element {
-  console.log("content.tsx:", data)
-
   return (
     <Routes>
-      <Route path="/" element={<Portfolio />} />
+      <Route path="/" element={<Portfolio data={data} />} />
       <Route path="/stocks" element={<Stocks data={data} />} />
-      <Route path="/options" element={<Options />} />
-      <Route path="/crypto" element={<Crypto />} />
-      <Route path="/dividends" element={<Dividends />} />
-      <Route path="/subscription-fees" element={<Fees />} />
-      <Route path="/margin-interest" element={<Fees />} />
+      <Route path="/options" element={<Options data={data} />} />
+      <Route path="/crypto" element={<Crypto data={data} />} />
+      <Route path="/dividends" element={<Dividends data={data} />} />
+      <Route path="/subscription-fees" element={<Fees data={data} />} />
+      <Route path="/margin-interest" element={<Fees data={data} />} />
       <Route path="/about" element={<About />} />
     </Routes>
   )

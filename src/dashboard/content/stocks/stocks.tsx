@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Summary } from "../components/summary";
-import { Table } from "../components/table";
+import { Table } from "./table";
 import { AllData } from '../../../../lib/types';
 
 type StocksProps = {
@@ -12,7 +12,7 @@ export function Stocks({ data }: StocksProps): JSX.Element {
   return (
     <div>
       <Summary />
-      <Table data={data} />
+      <Table data={data?.robinhood.stocks} />
     </div>
   )
 }
