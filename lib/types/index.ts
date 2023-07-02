@@ -20,7 +20,8 @@ export interface Data {
   options?: Option[];
   crypto?: Crypto[];
   dividends?: Dividend[];
-  fees?: Fee[];
+  marginInterest?: Fee[];
+  subscriptonFees?: Fee[];
   timeSynced?: string;
 }
 

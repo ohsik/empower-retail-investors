@@ -4,13 +4,18 @@ export interface Option {
   price: number;
   quantity: number;
   direction: 'debit' | 'credit';
-  option_type: 'call' | 'put';
-  position_effect: 'open' | 'close';
-  side: 'buy' | 'sell';
   fees: number;
-  strikePrice: number;
   premium: number;
-  expirationDate: string;
   executionDate: string;
+  legs: Leg[];
   profitOrLoss?: number;
+}
+
+interface Leg {
+  optionType: 'call' | 'put';
+  positionEffect: 'open' | 'close';
+  strikePrice: number;
+  side: 'buy' | 'sell';
+  executionPrice: number;
+  expirationDate: string;
 }

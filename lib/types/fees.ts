@@ -1,6 +1,6 @@
 export interface Fee {
   id: string;
-  type: 'subscription' | 'marginInterest';
+  type: 'subscriptionFee' | 'marginInterest';
   amount: number;
   excutionDate: string;
 }

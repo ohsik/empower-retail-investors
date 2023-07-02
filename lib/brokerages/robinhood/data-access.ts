@@ -71,6 +71,18 @@ export async function getUserData(currentBrokage: Brokerages | undefined, authTo
         }
       })
     );
+    
+    await Promise.all(
+      dataFormatted.dividends.results.map(async (trade: any, index: string | number) => {
+        const symbol = await getSymbols(trade.instrument);
+
+        dataFormatted.dividends.results[index] = {
+          ...dataFormatted.dividends.results[index],
+          symbol: symbol?.symbol,
+          companyName: symbol?.name,
+        }
+      })
+    );
 
     return dataFormatted;
   }

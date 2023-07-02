@@ -1,5 +1,8 @@
 import React from "react";
 import { Option } from "../../../../../lib/types";
+import { toUSD } from "../../../../../lib/helpers/to-usd";
+import { formatDate, formatDateTime } from "../../../../../lib/helpers/date-format";
+import { SlashDivider } from "../../../../../lib/ui/slash-divider";
 
 export interface TableProps {
   data: (Option[] | undefined);
@@ -7,29 +10,39 @@ export interface TableProps {
 
 export function Table({ data }: TableProps): JSX.Element {
   return (
-    <table className="w-full rounded">
+    <table className="w-full rounded capitalize">
       <thead>
         <tr className="text-xxs text-left border-b border-slate-500 border-opacity-40 uppercase">
           <th className="p-4">Symbol</th>
-          {/* <th className="p-4">Quantity</th>
+          <th className="p-4">Quantity</th>
           <th className="p-4">Price</th>
-          <th className="p-4">Side</th>
+          <th className="p-4">Direction</th>
           <th className="p-4">Fees</th>
+          <th className="p-4">Profit/Loss</th>
           <th className="p-4">Date</th>
-          <th className="p-4">Profit/Loss</th> */}
         </tr>
       </thead>
       <tbody>
         {data?.map((trade) => {
           return (
             <tr className="border-b border-slate-500 border-opacity-40" key={trade.id} id={trade.id}>
-              <td className="p-4">{trade.symbol}</td>
-              {/* <td className="p-4">{trade.quantity}</td>
-              <td className="p-4">{trade.price}</td>
-              <td className="p-4">{trade.side}</td>
-              <td className="p-4">{trade.fees}</td>
-              <td className="p-4">{trade.executionDate}</td>
-              <td className="p-4">{trade.profitOrLoss ?? 0}</td> */}
+              <td className="px-4 py-5">
+                {
+                  trade.legs.map((leg, index) => {
+                    return (
+                      <p key={index}>
+                        <b>{trade.symbol}</b> <span className="text-xs"><SlashDivider /> {toUSD(leg.strikePrice)} {leg.optionType} {formatDate(leg.expirationDate)} <SlashDivider /> {leg.side} to {leg.positionEffect}</span>
+                      </p>
+                    )
+                  })
+                }
+              </td>
+              <td className="px-4 py-5">{Number(trade.quantity).toFixed(2)}</td>
+              <td className="px-4 py-5">{toUSD(trade.price)}</td>
+              <td className="px-4 py-5">{trade.direction}</td>
+              <td className="px-4 py-5">{toUSD(trade.fees)}</td>
+              <td className="px-4 py-5">{toUSD(trade.profitOrLoss ?? 0)}</td>
+              <td className="px-4 py-5">{formatDateTime(trade.executionDate)}</td>
             </tr>
           )
         })}

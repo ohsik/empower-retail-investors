@@ -10,7 +10,7 @@ export const sidebarMenu: SidebarMenu[] = [
   { key: 'options', name: '⏳ Options', url: `/options` },
   { key: 'crypto', name: '🌎 Crypto', url: `/crypto` },
   { key: 'dividends', name: '💵 Dividends', url: `/dividends` },
-  { key: 'subscriptionFees', name: '💸 Subscription fees', url: `/subscription-fees` },
   { key: 'marginInterest', name: '💳 Margin interest', url: `/margin-interest` },
+  { key: 'subscriptionFees', name: '💸 Subscription fees', url: `/subscription-fees` },
   { key: 'about', name: '😻 About', url: `/about` }
 ];

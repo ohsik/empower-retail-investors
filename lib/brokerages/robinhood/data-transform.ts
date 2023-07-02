@@ -1,5 +1,5 @@
 import { Data } from "../../types";
-import { Stock, Crypto } from "../../types";
+import { Stock, Crypto, Option } from "../../types";
 
 /*
   fetchedData is Robnhood's data
@@ -9,6 +9,10 @@ import { Stock, Crypto } from "../../types";
 */
 export function dataTransform(fetchedData: any): Data {
   console.log({fetchedData})
+
+  // TODO: decide if we want to exclude cancelled, canceled, failed, voided, deleted orders
+  // or keep it but exclude on Profit/Loss calculation
+  // const EXCLUDED_DATA = ['cancelled', 'canceled', 'failed', 'voided', 'deleted'];
 
   // Stocks data transformation
   const stocks: Stock[] = fetchedData.data.orders.results.map((stock: any) => {
@@ -24,6 +28,32 @@ export function dataTransform(fetchedData: any): Data {
   });
 
   // Options data transformation
+  const options: Option[] = fetchedData.data.options.results
+    .map((option: any) => {
+      const executionDate = option.legs[0].executions[option.legs[0].executions.length - 1]?.timestamp ?? option.updated_at;
+      const legs = option.legs.map((leg: any) => {
+        return {
+          optionType: leg.option_type,
+          positionEffect: leg.position_effect,
+          side: leg.side,
+          strikePrice: leg.strike_price,
+          expirationDate: leg.expiration_date,
+        };
+      });
+
+      return {
+        id: option.id,
+        symbol: option.chain_symbol,
+        price: option.price,
+        quantity: option.quantity,
+        direction: option.direction,
+        fees: 0,
+        premium: option.premium,
+        executionDate: executionDate,
+        legs: legs,
+      };
+  });
+
 
   // Crypto data transformation
   const crypto: Crypto[] = fetchedData.data.crypto.results.map((crypto: any) => {
@@ -39,20 +69,45 @@ export function dataTransform(fetchedData: any): Data {
       executionDate: crypto.updated_at
     };
   });
+
   // Dividends data transformation
+  const dividends = fetchedData.data.dividends.results.map((dividend: any) => {
+    return {
+      id: dividend.id,
+      symbol: dividend.symbol ?? dividend.instrument,
+      amount: dividend.amount,
+      position: dividend.position,
+      excutionDate: dividend.payable_date,
+    };
+  });
 
   // Margin interest data transformation
+  const marginInterest = fetchedData.data.margin_interest_charges.results.map((fee: any) => {
+    return {
+      id: fee.id,
+      type: 'marginInterest',
+      amount: fee.amount,
+      excutionDate: fee.created_at,
+    };
+  });
 
   // Subscription fees data transformation
-
-  // user data transformation
+  const subscriptonFees = fetchedData.data.subscription_fees.results.map((fee: any) => {
+    return {
+      id: fee.id,
+      type: 'subscriptionFee',
+      amount: fee.amount,
+      excutionDate: fee.created_at,
+    };
+  });
   
   return {
     stocks: stocks,
-    options: fetchedData.data.options.results,
+    options: options,
     crypto: crypto,
-    dividends: fetchedData.data.dividends.results,
-    fees: fetchedData.data.subscription_fees.results,
+    dividends: dividends,
+    marginInterest: marginInterest,
+    subscriptonFees: subscriptonFees,
     timeSynced: fetchedData.timeSynced
   }
 }
