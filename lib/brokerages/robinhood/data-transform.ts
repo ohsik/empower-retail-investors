@@ -92,7 +92,7 @@ export function dataTransform(fetchedData: any): Data {
   });
 
   // Subscription fees data transformation
-  const subscriptonFees = fetchedData.data.subscription_fees.results.map((fee: any) => {
+  const subscriptionFees = fetchedData.data.subscription_fees.results.map((fee: any) => {
     return {
       id: fee.id,
       type: 'subscriptionFee',
@@ -107,7 +107,7 @@ export function dataTransform(fetchedData: any): Data {
     crypto: crypto,
     dividends: dividends,
     marginInterest: marginInterest,
-    subscriptonFees: subscriptonFees,
+    subscriptionFees: subscriptionFees,
     timeSynced: fetchedData.timeSynced
   }
 }

@@ -4,7 +4,7 @@ import { formatDateTime } from "../../../../../lib/helpers/date-format";
 import { toUSD } from "../../../../../lib/helpers/to-usd";
 
 export interface TableProps {
-  data: (Stock[] | undefined);
+  data: Stock[] | undefined;
 }
 
 export function Table({ data }: TableProps): JSX.Element {

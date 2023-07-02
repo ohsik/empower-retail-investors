@@ -5,7 +5,7 @@ import { formatDate, formatDateTime } from "../../../../../lib/helpers/date-form
 import { SlashDivider } from "../../../../../lib/ui/slash-divider";
 
 export interface TableProps {
-  data: (Option[] | undefined);
+  data: Option[] | undefined;
 }
 
 export function Table({ data }: TableProps): JSX.Element {
