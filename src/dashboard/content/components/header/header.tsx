@@ -5,6 +5,7 @@ import { Select } from "../../../../../lib/ui/select";
 import { SelectedDataContext } from "../../../context";
 import { TimeDurationSelectType, timeDurationSelect } from "../../../../../lib/consts/time-duration-select";
 import { sidebarMenu } from "../../../../../lib/consts/sidebar-menu";
+import { SlashDivider } from "../../../../../lib/ui/slash-divider";
 
 export function Header(): JSX.Element {
   const location = useLocation();
@@ -24,7 +25,7 @@ export function Header(): JSX.Element {
     <div className="grid grid-cols-[1fr,120px] items-center p-10 pb-0">
       <div>
         <h1 className="text-2xl font-bold capitalize">
-          {title} {!currentRoute.includes('about') && <span className="font-normal text-xl">/ {selectedBrokerage === 'all' ? 'All Brokerages' : `${selectedBrokerage}`}</span>}
+          {title} {!currentRoute.includes('about') && <span className="font-normal text-xl"><SlashDivider /> {selectedBrokerage === 'all' ? 'All Brokerages' : `${selectedBrokerage}`}</span>}
         </h1>
       </div>
       <div className="text-right">
