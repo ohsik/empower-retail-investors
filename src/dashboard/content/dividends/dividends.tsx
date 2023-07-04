@@ -28,7 +28,7 @@ export function Dividends({ data }: DividendsProps): JSX.Element {
             const data = dataToRender[dataKey][timeKey as any] as any; // TODO: fix this hack. Moving on for now tho lol
 
             return (
-              <div key={key} id={key} className='shadow-md mb-12 p-6 dark:shadow-neutral-600'>
+              <div key={key} id={key} className='shadow-md mb-12 p-6 dark:shadow-neutral-800'>
                 <Summary timeKey={timeKey} dataKey={dataKey} data={data} />
                 {!isAllBrokeragesSelected && <Table data={data} />}
               </div>

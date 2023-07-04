@@ -8,10 +8,11 @@ export interface Option {
   premium: number;
   executionDate: string;
   legs: Leg[];
+  underlyingPrice?: number
   profitOrLoss?: number;
 }
 
-interface Leg {
+export interface Leg {
   optionType: 'call' | 'put';
   positionEffect: 'open' | 'close';
   strikePrice: number;

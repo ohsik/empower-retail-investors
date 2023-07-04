@@ -1,3 +1,7 @@
+import { convertStringToNumber } from "../../helpers/string-to-number";
+import { cryptoProfitLossCalculator } from "../../profit-loss-calculator/crypto";
+import { optionsProfitLossCalculator } from "../../profit-loss-calculator/options";
+import { stocksProfitLossCalculator } from "../../profit-loss-calculator/stocks";
 import { Data, Stock, Option, Crypto, Dividend, Fee } from "../../types";
 
 /*
@@ -7,73 +11,83 @@ import { Data, Stock, Option, Crypto, Dividend, Fee } from "../../types";
   TODO: convert the data to the Data format
 */
 export function dataTransform(fetchedData: any): Data {
-
+  console.log({fetchedData})
   // TODO: decide if we want to exclude cancelled, canceled, failed, voided, deleted orders
   // or keep it but exclude on Profit/Loss calculation
-  // const EXCLUDED_DATA = ['cancelled', 'canceled', 'failed', 'voided', 'deleted'];
+  const INCLUDE_DATA = ["filled"];
+  const EXCLUDED_DATA = ['cancelled', 'canceled', 'failed', 'voided', 'deleted'];
 
   // Stocks data transformation
-  const stocks: Stock[] = fetchedData.data.orders.results.map((stock: any) => {
+  const stocks: Stock[] = fetchedData.data.orders.results
+  .filter((stock: any) => INCLUDE_DATA.includes(stock.state))
+  .map((stock: any) => {
     return { 
       id: stock.id,
       symbol: stock.symbol ?? stock.instrument,
-      price: stock.average_price ?? stock.price,
-      quantity: stock.quantity,
+      price: convertStringToNumber(stock.average_price ?? stock.price),
+      quantity: convertStringToNumber(stock.quantity),
       fees: stock.fees,
       side: stock.side,
-      executionDate: stock.updated_at
+      executionDate: stock.updated_at,
     }
   });
 
   // Options data transformation
   const options: Option[] = fetchedData.data.options.results
-    .map((option: any) => {
-      const executionDate = option.legs[0].executions[option.legs[0].executions.length - 1]?.timestamp ?? option.updated_at;
-      const legs = option.legs.map((leg: any) => {
-        return {
-          optionType: leg.option_type,
-          positionEffect: leg.position_effect,
-          side: leg.side,
-          strikePrice: leg.strike_price,
-          expirationDate: leg.expiration_date,
-        };
-      });
-
-      return { 
-        id: option.id,
-        symbol: option.chain_symbol,
-        price: option.price,
-        quantity: option.quantity,
-        direction: option.direction,
-        fees: 0,
-        premium: option.premium,
-        executionDate: executionDate,
-        legs: legs,
+  .filter((order: { state: string }) => !EXCLUDED_DATA.includes(order.state))
+  .map((option: any) => {
+    const executionDate = option.legs[0].executions[option.legs[0].executions.length - 1]?.timestamp ?? option.updated_at;
+    const legs = option.legs.map((leg: any) => {
+      return {
+        optionType: leg.option_type,
+        positionEffect: leg.position_effect,
+        side: leg.side,
+        strikePrice: convertStringToNumber(leg.strike_price),
+        expirationDate: leg.expiration_date,
+        executionPrice: convertStringToNumber(option.price) // TODO: probably need a function to get avg execution price from [let.executions[0].price and let.executions[0].quantity]
       };
+    });
+
+    return { 
+      id: option.id,
+      symbol: option.chain_symbol,
+      price: convertStringToNumber(option.price),
+      quantity: convertStringToNumber(option.quantity),
+      direction: option.direction,
+      fees: 0,
+      premium: convertStringToNumber(option.premium),
+      executionDate: executionDate,
+      legs: legs,
+      underlyingPrice: convertStringToNumber(option.underlying_price),
+    };
   });
 
 
   // Crypto data transformation
-  const crypto: Crypto[] = fetchedData.data.crypto.results.map((crypto: any) => {
+  const crypto: Crypto[] = fetchedData.data.crypto.results
+  .filter((stock: any) => INCLUDE_DATA.includes(stock.state))
+  .map((crypto: any) => {
     const symbol = fetchedData.data.crypto_currency_pair.results.find((currency: any) => currency.id === crypto.currency_pair_id);
 
     return {
       id: crypto.id,
       symbol: symbol.symbol ?? crypto.currency_pair_id,
-      price: crypto.average_price,
-      quantity: crypto.quantity,
+      price: convertStringToNumber(crypto.average_price),
+      quantity: convertStringToNumber(crypto.quantity),
       fees: 0,
       side: crypto.side,
-      executionDate: crypto.updated_at
+      executionDate: crypto.last_transaction_at
     };
   });
 
   // Dividends data transformation
-  const dividends: Dividend[] = fetchedData.data.dividends.results.map((dividend: any) => {
+  const dividends: Dividend[] = fetchedData.data.dividends.results
+  .filter((order: { state: string }) => !EXCLUDED_DATA.includes(order.state))
+  .map((dividend: any) => {
     return {
       id: dividend.id,
       symbol: dividend.symbol ?? dividend.instrument,
-      amount: dividend.amount,
+      amount: convertStringToNumber(dividend.amount),
       position: dividend.position,
       executionDate: dividend.payable_date, 
     };
@@ -84,7 +98,7 @@ export function dataTransform(fetchedData: any): Data {
     return {
       id: fee.id,
       type: 'marginInterest',
-      amount: fee.amount,
+      amount: -convertStringToNumber(fee.amount),
       executionDate: fee.created_at,
     }
   });
@@ -94,15 +108,23 @@ export function dataTransform(fetchedData: any): Data {
     return {
       id: fee.id,
       type: 'subscriptionFee',
-      amount: fee.amount,
+      amount: -convertStringToNumber(fee.amount),
       executionDate: fee.created_at,
     }
   });
   
+
+  /*
+    Adding ProfitOrLoss on Stocks, Options, and Crypto
+  */
+  const stocksWithProfitOrLoss = stocksProfitLossCalculator(stocks);
+  const optionsWithProfitOrLoss = optionsProfitLossCalculator(options);
+  const cryptoWithProfitOrLoss = cryptoProfitLossCalculator(crypto);
+
   return {
-    stocks: { 'all': stocks },
-    options: { 'all':  options},
-    crypto: { 'all':  crypto},
+    stocks: { 'all': stocksWithProfitOrLoss },
+    options: { 'all':  optionsWithProfitOrLoss},
+    crypto: { 'all':  cryptoWithProfitOrLoss},
     dividends: { 'all':  dividends},
     marginInterest: { 'all':  marginInterest},
     subscriptionFees: { 'all':  subscriptionFees},
