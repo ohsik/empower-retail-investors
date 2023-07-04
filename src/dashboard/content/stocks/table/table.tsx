@@ -16,7 +16,7 @@ export function Table({ data }: TableProps): JSX.Element {
   }
 
   function downloadCVS() {
-    alert('Download CVS file is coming soon. Stay tuned 🙌');
+    alert('Download CSV file is coming soon. Stay tuned 🙌');
   }
 
   return (
