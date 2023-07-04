@@ -5,6 +5,7 @@ import { Table } from "./table";
 import { AllData, DividendsWithKey } from '../../../../lib/types';
 import { handleContentSelectData } from '../../../../lib/helpers/handle-content-select-data';
 import { SelectedDataContext } from '../../context';
+import { AllBrokeragesSummary } from '../components/all-brokerages-summary';
 
 type DividendsProps = {
   data: AllData | undefined;
@@ -17,6 +18,7 @@ export function Dividends({ data }: DividendsProps): JSX.Element {
 
   return (
     <div>
+      {isAllBrokeragesSelected && <AllBrokeragesSummary />}
       {
         Object.keys(dataToRender)?.map((dataKey) => {
           // dataKey: robinhood, fidelity, etc.
@@ -26,7 +28,7 @@ export function Dividends({ data }: DividendsProps): JSX.Element {
             const data = dataToRender[dataKey][timeKey as any] as any; // TODO: fix this hack. Moving on for now tho lol
 
             return (
-              <div key={key} id={key} className='shadow-md mb-12 p-6'>
+              <div key={key} id={key} className='shadow-md mb-12 p-6 dark:shadow-neutral-600'>
                 <Summary timeKey={timeKey} dataKey={dataKey} data={data} />
                 {!isAllBrokeragesSelected && <Table data={data} />}
               </div>

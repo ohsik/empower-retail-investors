@@ -5,7 +5,7 @@ import { Table } from "./table";
 import { AllData, StocksWithKey } from '../../../../lib/types';
 import { handleContentSelectData } from '../../../../lib/helpers/handle-content-select-data';
 import { SelectedDataContext } from '../../context';
-import { Link } from 'react-router-dom';
+import { AllBrokeragesSummary } from '../components/all-brokerages-summary';
 
 type StocksProps = {
   data: AllData | undefined;
@@ -18,11 +18,7 @@ export function Stocks({ data }: StocksProps): JSX.Element {
 
   return (
     <div>
-      {isAllBrokeragesSelected &&
-        <div className='shadow-md mb-12 p-6'>
-          📣 We need help to brings more brokerages into Empower Retail Investors. Please checkout <Link to={`/about`} className='underline text-primary'>About page</Link> for more info.
-        </div>
-      }
+      {isAllBrokeragesSelected && <AllBrokeragesSummary />}
       {
         Object.keys(dataToRender)?.map((dataKey) => {
           // dataKey: robinhood, fidelity, etc.
@@ -32,7 +28,7 @@ export function Stocks({ data }: StocksProps): JSX.Element {
             const data = dataToRender[dataKey][timeKey as any] as any; // TODO: fix this hack. Moving on for now tho lol
 
             return (
-              <div key={key} id={key} className='shadow-md mb-12 p-6'>
+              <div key={key} id={key} className='shadow-md mb-12 p-6 dark:shadow-neutral-600'>
                 <Summary timeKey={timeKey} dataKey={dataKey} data={data} />
                 <Table data={data} />
               </div>

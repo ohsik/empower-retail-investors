@@ -29,7 +29,7 @@ export function Portfolio({ data }: PortfolioProps): JSX.Element {
                   keyWording = 'Subscription Fees';
                 }
                 return (
-                  <div key={key} className='shadow-md mb-6 p-6'>
+                  <div key={key} className='shadow-md mb-6 p-6 dark:shadow-neutral-600'>
                     <Summary timeKey={brokerage} dataKey={keyWording} data={value} />
                   </div>
                 )

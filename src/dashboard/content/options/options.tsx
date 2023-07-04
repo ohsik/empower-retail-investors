@@ -5,6 +5,8 @@ import { Table } from "./table";
 import { AllData, OptionsWithKey } from '../../../../lib/types';
 import { handleContentSelectData } from '../../../../lib/helpers/handle-content-select-data';
 import { SelectedDataContext } from '../../context';
+import { Link } from 'react-router-dom';
+import { AllBrokeragesSummary } from '../components/all-brokerages-summary';
 
 type OptionsProps = {
   data: AllData | undefined;
@@ -17,6 +19,7 @@ export function Options({ data }: OptionsProps): JSX.Element {
 
   return (
     <div>
+      {isAllBrokeragesSelected && <AllBrokeragesSummary />}
       {
         Object.keys(dataToRender)?.map((dataKey) => {
           // dataKey: robinhood, fidelity, etc.
@@ -26,9 +29,9 @@ export function Options({ data }: OptionsProps): JSX.Element {
             const data = dataToRender[dataKey][timeKey as any] as any; // TODO: fix this hack. Moving on for now tho lol
 
             return (
-              <div key={key} id={key} className='shadow-md mb-12 p-6'>
+              <div key={key} id={key} className='shadow-md mb-12 p-6 dark:shadow-neutral-600'>
                 <Summary timeKey={timeKey} dataKey={dataKey} data={data} />
-                {!isAllBrokeragesSelected && <Table data={data} />}
+                <Table data={data} />
               </div>
             )
           });
