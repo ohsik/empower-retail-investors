@@ -8,10 +8,10 @@ import { Header } from '../content/components/header';
 import { SelectedDataContext } from '../context/context';
 
 export function Home() {
-  const { data, isLoading, availableBrokerages, selectedBrokerage, selectedTimeDuration, setSelectedTimeDuration } = useHome();
-  // console.log(data)
+  const { data, originalTransformedData, isLoading, availableBrokerages, selectedBrokerage, selectedTimeDuration, setSelectedTimeDuration } = useHome();
+
   return (
-    <SelectedDataContext.Provider value={{ selectedBrokerage, selectedTimeDuration, setSelectedTimeDuration }}>
+    <SelectedDataContext.Provider value={{ originalTransformedData, selectedBrokerage, selectedTimeDuration, setSelectedTimeDuration }}>
       <div className="grid grid-cols-[220px,1fr] gap-4 text-sm">
         <div>
           <Sidebar availableBrokerages={availableBrokerages} />

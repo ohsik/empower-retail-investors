@@ -6,7 +6,7 @@ import { AllData, OptionsWithKey } from '../../../../lib/types';
 import { handleContentSelectData } from '../../../../lib/helpers/handle-content-select-data';
 import { SelectedDataContext } from '../../context';
 import { Link } from 'react-router-dom';
-import { AllBrokeragesSummary } from '../components/all-brokerages-summary';
+import { AllBrokeragesWarning } from '../components/all-brokerages-warning';
 
 type OptionsProps = {
   data: AllData | undefined;
@@ -19,7 +19,7 @@ export function Options({ data }: OptionsProps): JSX.Element {
 
   return (
     <div>
-      {isAllBrokeragesSelected && <AllBrokeragesSummary />}
+      {isAllBrokeragesSelected && <AllBrokeragesWarning />}
       {
         Object.keys(dataToRender)?.map((dataKey) => {
           // dataKey: robinhood, fidelity, etc.

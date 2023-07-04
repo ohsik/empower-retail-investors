@@ -21,6 +21,10 @@ export function Header(): JSX.Element {
     setSearchParams(searchParams);
   }
 
+  // The main homepage will show to overall total of all brokerages, so we don't need to show the time duration select UI
+  const isPortfolioPage = sidebarMenu.find((item) => item.url === currentRoute)?.key === 'portfolio';
+  const hideTimeDurationSelectUI = selectedBrokerage === 'all' && isPortfolioPage;
+
   return (
     <div className="grid grid-cols-[1fr,120px] items-center p-10 pb-0">
       <div>
@@ -29,7 +33,7 @@ export function Header(): JSX.Element {
         </h1>
       </div>
       <div className="text-right">
-        {!currentRoute.includes('about') && <Select onChange={handleTimeDurationChange} arrayData={timeDurationSelect} selectedOption={selectedTimeDuration} />}
+        {!currentRoute.includes('about') && !hideTimeDurationSelectUI && <Select onChange={handleTimeDurationChange} arrayData={timeDurationSelect} selectedOption={selectedTimeDuration} />}
       </div>
     </div>
   )

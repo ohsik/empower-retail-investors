@@ -5,7 +5,7 @@ import { Table } from "./table";
 import { AllData, CryptoWithKey } from '../../../../lib/types';
 import { handleContentSelectData } from '../../../../lib/helpers/handle-content-select-data';
 import { SelectedDataContext } from '../../context';
-import { AllBrokeragesSummary } from '../components/all-brokerages-summary';
+import { AllBrokeragesWarning } from '../components/all-brokerages-warning';
 
 type CryptoProps = {
   data: AllData | undefined;
@@ -18,7 +18,7 @@ export function Crypto({ data }: CryptoProps): JSX.Element {
 
   return (
     <div>
-      {isAllBrokeragesSelected && <AllBrokeragesSummary />}
+      {isAllBrokeragesSelected && <AllBrokeragesWarning />}
       {
         Object.keys(dataToRender)?.map((dataKey) => {
           // dataKey: robinhood, fidelity, etc.
@@ -30,7 +30,7 @@ export function Crypto({ data }: CryptoProps): JSX.Element {
             return (
               <div key={key} id={key} className='shadow-md mb-12 p-6 dark:shadow-neutral-800'>
                 <Summary timeKey={timeKey} dataKey={dataKey} data={data} />
-                {!isAllBrokeragesSelected && <Table data={data} />}
+                <Table data={data} />
               </div>
             )
           });

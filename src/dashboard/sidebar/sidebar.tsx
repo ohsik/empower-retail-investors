@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 import { Brokerages, brokerageNames } from "../../../lib/consts/brokerages";
 import { SelectedDataContext } from "../context";
 import { sidebarMenu } from "../../../lib/consts/sidebar-menu";
+import { Data } from "../../../lib/types";
 
 type SidebarProps = {
   availableBrokerages: Brokerages[] | undefined;
@@ -12,13 +13,19 @@ type SidebarProps = {
 
 export function Sidebar({ availableBrokerages }: SidebarProps ): JSX.Element {
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentRoute = location.pathname;
+  const dataKey = sidebarMenu.find((item) => item.url === currentRoute)?.key as keyof Data;
+  
   const { selectedBrokerage, selectedTimeDuration } = useContext(SelectedDataContext);
 
   return (
-    <div className="p-10">
+    <div className="p-10 fixed">
       <div className="mb-6 font-bold text-lg text-primary mt-[-10px]">
-        <span className="block text-[40px]">🚀</span>
-        Empower<br />Retail<br />Investors
+        <Link to="/">
+          <span className="block text-[40px]">🚀</span>
+          Empower<br />Retail<br />Investors
+        </Link>
       </div>
 
       <div className="mb-6">
@@ -37,9 +44,9 @@ export function Sidebar({ availableBrokerages }: SidebarProps ): JSX.Element {
       </div>
 
       {sidebarMenu.map((item, index) => (
-        <li className="list-none my-3 underline" key={index}>
+        <li className="list-none my-3" key={index}>
           <Link to={`${item.url}?brokerage=${selectedBrokerage}&timeduration=${selectedTimeDuration}`}>
-            {item.name}
+            {dataKey === item.key ? <b>{item.name}</b>: <span className="underline">{item.name}</span>}
           </Link>
         </li>
       ))}

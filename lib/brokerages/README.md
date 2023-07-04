@@ -19,4 +19,4 @@
 ### Convert Robinhood trading data for Empower Retail Investor Reports
 TBD
 
-List of stock brockerages: `lib/consts/brokerages.ts`
+List of stock brokerages: `lib/consts/brokerages.ts`

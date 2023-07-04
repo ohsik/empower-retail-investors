@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export function AllBrokeragesSummary({ text }: { text?: string}) {
+export function AllBrokeragesWarning({ text }: { text?: string}) {
   return (
     <div className='shadow-md mb-2 p-6'>
       📣 &nbsp;

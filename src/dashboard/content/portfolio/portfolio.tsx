@@ -1,46 +1,57 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { Summary } from "../components/summary";
 import { AllData } from '../../../../lib/types';
-import { SelectedDataContext } from '../../context';
-import { AllBrokeragesSummary } from '../components/all-brokerages-summary';
+import { AllBrokeragesWarning } from '../components/all-brokerages-warning';
+import { AllBroderages } from './components/all-brokerages';
+import { PortfolioSummary } from './components/portfolio-summary';
+import { createGraphData } from '../../../../lib/helpers/create-graph-data';
+import { Graph } from './components/graph';
+import { usePortfolio } from './usePortfolio';
 
 type PortfolioProps = {
   data: AllData | undefined;
 }
 
 export function Portfolio({ data }: PortfolioProps): JSX.Element {
-  const { selectedBrokerage } = useContext(SelectedDataContext);
+  const { totalsFromTradingTypesObj, grandTotal, selectedTimeDuration, selectedBrokerage } = usePortfolio();
   const isAllBrokeragesSelected = selectedBrokerage === 'all';
+
+  const selectedBrokerageData = (data && data[selectedBrokerage]) ?? {};
+  const graphData = createGraphData(selectedBrokerageData);
+
   return (
     <div>
-      {isAllBrokeragesSelected && <AllBrokeragesSummary />}
-      <h1 className="text-xl font-bold my-4">Portfolio Summary</h1>
-      {/* {
-        Object.entries(data as AllData).map(( [brokerage, data] ) => {
-          return (
-            Object.entries(data).map(([key, value]) => {
-              if(key !== 'timeSynced') {
-                let keyWording = key;
+      {/* All brokerages summary */}
+      {isAllBrokeragesSelected && 
+        <>
+          <AllBrokeragesWarning />
+          <AllBroderages />
+        </>
+      }
 
-                if(key === 'marginInterest') {
-                  keyWording = 'mMargin Interest';
-                }
+      {/* A brockerage summary */}
+      {!isAllBrokeragesSelected && 
+        <>
+          <PortfolioSummary totalsFromTradingTypesObj={totalsFromTradingTypesObj} grandTotal={grandTotal} brokerage={selectedBrokerage} />
 
-                if(key === 'subscriptionFees') {
-                  keyWording = 'Subscription Fees';
+          {
+            selectedTimeDuration !== 'all' ? 
+              <div className="text-xl font-semibold my-1">
+                {
+                  Object.entries(graphData).map(([section, graphData]) => {
+                    return (
+                      <Graph key={section} graphData={graphData as any} section={section} />
+                    )
+                  })
                 }
-                return (
-                  <div key={key} className='shadow-md mb-6 p-6 dark:shadow-neutral-800'>
-                    <Summary timeKey={brokerage} dataKey={keyWording} data={value} />
-                  </div>
-                )
-              }
-            })
-          )
-        })
-      } */}
-      
+              </div>
+            : 
+              <div className='grid justify-center items-center h-[200px] opacity-50 text-xs'>
+                To visualize the trading performance graph, select a different time frame from the available options.
+              </div>
+          }
+        </>
+      }
     </div>
   )
 }

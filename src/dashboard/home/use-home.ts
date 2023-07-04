@@ -9,6 +9,7 @@ import { dataByTimeDuration } from "../../../lib/helpers/data-by-time-duration";
 
 type UseHomeReturn = {
   data: AllData | undefined;
+  originalTransformedData: AllData | undefined;
   isLoading: boolean;
   availableBrokerages: Brokerages[] | undefined;
   selectedBrokerage: Brokerages;
@@ -19,6 +20,7 @@ type UseHomeReturn = {
 export function useHome(): UseHomeReturn {
   const [fetchedData, setFetchedData] = useState<any>();
   const [originalTransformedData, setOriginalTransformedData] = useState<AllData>({});
+  const [copiedOriginalTransformedData, setCopiedOriginalTransformedData] = useState<AllData>({});
   const [transformedData, setTransformedData] = useState<AllData>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchParams] = useSearchParams();
@@ -34,7 +36,6 @@ export function useHome(): UseHomeReturn {
       );
 
       setFetchedData(filteredData);
-      setIsLoading(false);
     });
   }, []);
 
@@ -66,18 +67,24 @@ export function useHome(): UseHomeReturn {
   const updateSelectedTimeDuration = useCallback(
     async (selectedTimeDuration: TimeDurationSelectType) => {
       if (originalTransformedData) {
+        const clonedOrigialTransformedData = structuredClone(originalTransformedData);
+
+        // Because originalTransformedData is set in useEffect, it is not available in the first render
+        // Had to copy that to another state to pass through context that can be used in other components
+        setCopiedOriginalTransformedData(clonedOrigialTransformedData);
+
         setIsLoading(true);
         setTimeDuration(selectedTimeDuration);
 
         const transformDataByDuration = async () => {
           const newData: AllData = {};
 
-          for (const dataKey of Object.keys(originalTransformedData)) {
+          for (const dataKey of Object.keys(clonedOrigialTransformedData)) {
             const results = await Promise.all(
-              Object.keys(originalTransformedData[dataKey]).map(async (order) => {
+              Object.keys(clonedOrigialTransformedData[dataKey]).map(async (order) => {
                 const dataByDuration = await dataByTimeDuration(
                   selectedTimeDuration,
-                  originalTransformedData[dataKey][order as keyof Data]
+                  clonedOrigialTransformedData[dataKey][order as keyof Data]
                 );
                 return { [order]: dataByDuration };
               })
@@ -106,6 +113,7 @@ export function useHome(): UseHomeReturn {
   
   return {
     data: transformedData,
+    originalTransformedData: copiedOriginalTransformedData,
     isLoading,
     availableBrokerages: availableBrokeragesWithAll,
     selectedBrokerage,

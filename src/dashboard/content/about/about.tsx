@@ -34,7 +34,8 @@ export function About({}: AboutProps): JSX.Element {
         <li>D3</li>
       </ul>
 
-      <p className='my-8 italic'><a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo for Empower Retail Investors</a> will be public eventually as we get more contributors.</p>
+      <p className='my-8'><a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo for Empower Retail Investors</a> will be public eventually as we get more contributors.<br />(current team: 🤖 ChatGPT and 😼 I)
+      </p>
 
       <p>Current version: v 0.0.1</p>
     </div>
