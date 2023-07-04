@@ -1,10 +1,11 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from 'react-router-dom';
 
 import { BROKERAGES_VARS } from "../../../lib/brokerages";
-import { AllData } from "../../../lib/types";
+import { AllData, Data } from "../../../lib/types";
 import { Brokerages } from "../../../lib/consts/brokerages";
 import { TimeDurationSelectType } from "../../../lib/consts/time-duration-select";
+import { dataByTimeDuration } from "../../../lib/helpers/data-by-time-duration";
 
 type UseHomeReturn = {
   data: AllData | undefined;
@@ -17,12 +18,12 @@ type UseHomeReturn = {
 
 export function useHome(): UseHomeReturn {
   const [fetchedData, setFetchedData] = useState<any>();
+  const [originalTransformedData, setOriginalTransformedData] = useState<AllData>({});
+  const [transformedData, setTransformedData] = useState<AllData>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchParams] = useSearchParams();
-  const [timeDuration, setTimeDuration] = useState<TimeDurationSelectType>(searchParams.get('timeDuration') as TimeDurationSelectType ?? TimeDurationSelectType.All);
+  const [timeDuration, setTimeDuration] = useState<TimeDurationSelectType>(searchParams.get('timeduration') as TimeDurationSelectType ?? TimeDurationSelectType.All);
 
-  // TODO: might need to add setSelectedBrokerage function and hook it up to DataSelectedContext
-  // Just like setSelectedTimeDuration. For now, it's fine.
   const selectedBrokerage = searchParams.get('brokerage') as Brokerages ?? Brokerages.All;
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export function useHome(): UseHomeReturn {
     });
   }, []);
 
-  const transformedData = useMemo(() => {
+  useEffect(() => {
     if (fetchedData) {
       setIsLoading(true);
 
@@ -57,25 +58,58 @@ export function useHome(): UseHomeReturn {
         }
       });
 
+      setOriginalTransformedData(data);
       setIsLoading(false);
-      return data;
     }
   }, [fetchedData]);
+
+  const updateSelectedTimeDuration = useCallback(
+    async (selectedTimeDuration: TimeDurationSelectType) => {
+      if (originalTransformedData) {
+        setIsLoading(true);
+        setTimeDuration(selectedTimeDuration);
+
+        const transformDataByDuration = async () => {
+          const newData: AllData = {};
+
+          for (const dataKey of Object.keys(originalTransformedData)) {
+            const results = await Promise.all(
+              Object.keys(originalTransformedData[dataKey]).map(async (order) => {
+                const dataByDuration = await dataByTimeDuration(
+                  selectedTimeDuration,
+                  originalTransformedData[dataKey][order as keyof Data]
+                );
+                return { [order]: dataByDuration };
+              })
+            );
+
+            newData[dataKey] = Object.assign({}, ...results);
+          }
+
+          setTransformedData(newData);
+          setIsLoading(false);
+        };
+
+        transformDataByDuration();
+      }
+    },
+    [originalTransformedData]
+  );
+
+  useEffect(() => {
+    updateSelectedTimeDuration(timeDuration);
+  }, [updateSelectedTimeDuration, timeDuration]);
 
   const availableBrokerages = transformedData && Object.keys(transformedData) as Brokerages[];
   // Add 'All Brokerages' option to the dropdown
   const availableBrokeragesWithAll = availableBrokerages && [Brokerages.All, ...availableBrokerages];
-
-  function setSelectedTimeDuration(selectedTimeDuration: TimeDurationSelectType) {
-    setTimeDuration(selectedTimeDuration)
-  }
-
+  
   return {
     data: transformedData,
     isLoading,
     availableBrokerages: availableBrokeragesWithAll,
     selectedBrokerage,
     selectedTimeDuration: timeDuration,
-    setSelectedTimeDuration,
+    setSelectedTimeDuration: updateSelectedTimeDuration,
   };
 }

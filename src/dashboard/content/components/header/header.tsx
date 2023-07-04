@@ -10,7 +10,7 @@ import { SlashDivider } from "../../../../../lib/ui/slash-divider";
 export function Header(): JSX.Element {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { selectedBrokerage, setSelectedTimeDuration } = useContext(SelectedDataContext);
+  const { selectedBrokerage, setSelectedTimeDuration, selectedTimeDuration } = useContext(SelectedDataContext);
 
   const currentRoute = location.pathname;
   const title = sidebarMenu.find((item) => item.url === currentRoute)?.name;
@@ -29,7 +29,7 @@ export function Header(): JSX.Element {
         </h1>
       </div>
       <div className="text-right">
-        {!currentRoute.includes('about') && <Select onChange={handleTimeDurationChange} arrayData={timeDurationSelect} />}
+        {!currentRoute.includes('about') && <Select onChange={handleTimeDurationChange} arrayData={timeDurationSelect} selectedOption={selectedTimeDuration} />}
       </div>
     </div>
   )

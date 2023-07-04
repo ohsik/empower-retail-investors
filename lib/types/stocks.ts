@@ -8,3 +8,7 @@ export interface Stock {
   executionDate: string;
   profitOrLoss?: number;
 }
+
+export interface StocksWithKey {
+  [key: string]: Stock[]
+}

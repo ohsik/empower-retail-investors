@@ -1,40 +1,38 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Summary } from "../components/summary";
 import { Table } from "./table";
-import { AllData, Fee } from '../../../../lib/types';
+import { AllData, FeesWithKey } from '../../../../lib/types';
 import { handleContentSelectData } from '../../../../lib/helpers/handle-content-select-data';
+import { SelectedDataContext } from '../../context';
 
 type FeesProps = {
   data: AllData | undefined;
 };
 
 export function Fees({ data }: FeesProps): JSX.Element {
-  const dataToRender = handleContentSelectData(data);
+  const { selectedBrokerage } = useContext(SelectedDataContext);
+  const isAllBrokeragesSelected = selectedBrokerage === 'all';
+  const dataToRender = handleContentSelectData(data) as FeesWithKey;
   
   return (
     <div>
-      {dataToRender?.isMutipleBrokerages ?
-        (
-          (dataToRender?.selectedData as Fee[])?.map((data, index) => {
-            const brockerageKey = Object.keys(data)[index];
-            const selectedData = Object.values(data)[index];
+      {
+        Object.keys(dataToRender)?.map((dataKey) => {
+          // dataKey: robinhood, fidelity, etc.
+          return dataToRender[dataKey] && Object.keys(dataToRender[dataKey]).map((timeKey) => {
+            // timeKey: all, 2021, 2021+06, etc.
+            const key = dataKey+'+'+timeKey;
+            const data = dataToRender[dataKey][timeKey as any] as any; // TODO: fix this hack. Moving on for now tho lol
 
             return (
-              <div key={brockerageKey} id={brockerageKey}>
-                <Summary brokerage={brockerageKey} />
-                <Table data={selectedData} />
+              <div key={key} id={key} className='shadow-md mb-12 p-6'>
+                <Summary timeKey={timeKey} dataKey={dataKey} data={data} />
+                {!isAllBrokeragesSelected && <Table data={data} />}
               </div>
             )
-          })
-        ) 
-      :
-        (
-          <div>
-            <Summary />
-            <Table data={dataToRender?.selectedData as Fee[]} />
-          </div>
-        )
+          });
+        })
       }
     </div>
   )

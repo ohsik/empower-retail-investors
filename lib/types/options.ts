@@ -19,3 +19,7 @@ interface Leg {
   executionPrice: number;
   expirationDate: string;
 }
+
+export interface OptionsWithKey {
+  [key: string]: Option[];
+}

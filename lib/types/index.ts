@@ -9,22 +9,30 @@ export * from './options';
 export * from './dividends';
 export * from './fees';
 
-import { Crypto } from './crypto';
-import { Stock } from './stocks';
-import { Option } from './options';
-import { Dividend } from './dividends';
-import { Fee } from './fees';
+import { Crypto, CryptoWithKey } from './crypto';
+import { Stock, StocksWithKey } from './stocks';
+import { Option, OptionsWithKey } from './options';
+import { Dividend, DividendsWithKey } from './dividends';
+import { Fee, FeesWithKey } from './fees';
 
 export interface Data {
-  stocks?: Stock[];
-  options?: Option[];
-  crypto?: Crypto[];
-  dividends?: Dividend[];
-  marginInterest?: Fee[];
-  subscriptionFees?: Fee[];
+  stocks?: StocksWithKey;
+  options?: OptionsWithKey;
+  crypto?: CryptoWithKey;
+  dividends?: DividendsWithKey;
+  marginInterest?: FeesWithKey;
+  subscriptionFees?: FeesWithKey;
   timeSynced?: string;
 }
 
 export interface AllData {
   [key: string]: Data;
 };
+
+export interface DataWithKeys {
+  data?: StocksWithKey | OptionsWithKey | CryptoWithKey | DividendsWithKey | FeesWithKey | undefined;
+}
+
+export interface DataArrays {
+  data?: (Stock | Option | Crypto | Dividend | Fee)[] | undefined;
+}

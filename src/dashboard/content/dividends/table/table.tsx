@@ -26,10 +26,10 @@ export function Table({ data }: TableProps): JSX.Element {
         <table className="w-full rounded border capitalize">
           <thead>
             <tr className="text-xxs text-left border-b uppercase">
-              <th className="p-4">Symbol</th>
-              <th className="p-4">Position</th>
-              <th className="p-4">Amount</th>
-              <th className="p-4">Date</th>
+              <th className="p-4 py-2">Symbol</th>
+              <th className="p-4 py-2">Position</th>
+              <th className="p-4 py-2">Amount</th>
+              <th className="p-4 py-2">Date</th>
             </tr>
           </thead>
           <tbody>
@@ -39,7 +39,7 @@ export function Table({ data }: TableProps): JSX.Element {
                   <td className="px-4 py-5"><b>{trade.symbol}</b></td>
                   <td className="px-4 py-5">{Number(trade.position).toFixed(2)}</td>
                   <td className="px-4 py-5">{toUSD(trade.amount)}</td>
-                  <td className="px-4 py-5">{formatDateTime(trade.excutionDate)}</td>
+                  <td className="px-4 py-5">{formatDateTime(trade.executionDate)}</td>
                 </tr>
               )
             })}

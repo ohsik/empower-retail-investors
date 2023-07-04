@@ -9,8 +9,10 @@ type AboutProps = {
 export function About({}: AboutProps): JSX.Element {
   return (
     <div className='text-l max-w-xl'>
-      <h1 className='text-3xl my-4'>Hi there 👋, thank you for using Empower Retail Investors.</h1>
-      <p className='my-2'>Empower Retail Investors is a free, open-source, and privacy-focused portfolio reports for retail investors. Empower Retail Investors is currently in beta. If you have any feedback or interested in contributing, please send me an email to o(at)goodnightjournal(dot)com.</p>
+      <h1 className='text-2xl my-4'>Hi there 👋, thank you for being here.</h1>
+      <p className='my-2'>Empower Retail Investors is a free portfolio reporting tool designed to provide useful tools and resources for retail investors. We are currently in beta and actively seeking feedback and contributions.</p>
+
+      <p>If you have any feedback or are interested in contributing to Empower Retail Investors, please send an email to o(at)goodnightjournal(dot)com. We appreciate your support and look forward to hearing from you!</p>
 
       <h2 className='text-xl my-4 font-bold'>Currently supported brokerage:</h2>
       <ul className='list-disc list-inside'>
@@ -32,7 +34,7 @@ export function About({}: AboutProps): JSX.Element {
         <li>D3</li>
       </ul>
 
-      <p className='my-8'>Github repo for Empower Retail Investors will be in public as we get more contributors.</p>
+      <p className='my-8 italic'><a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo for Empower Retail Investors</a> will be public eventually as we get more contributors.</p>
 
       <p>Current version: v 0.0.1</p>
     </div>

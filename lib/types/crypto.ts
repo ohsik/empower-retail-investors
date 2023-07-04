@@ -8,3 +8,7 @@ export interface Crypto {
   executionDate: string;
   profitOrLoss?: number;
 }
+
+export interface CryptoWithKey {
+  [key: string]: Crypto[];
+};

@@ -11,6 +11,7 @@
   "license": "ISC",
   "keywords": [],
   "dependencies": {
+    "d3": "^7.8.5",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -22,6 +23,7 @@
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
     "@types/chrome": "^0.0.238",
+    "@types/d3": "^7.4.0",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "autoprefixer": "^10.4.14",

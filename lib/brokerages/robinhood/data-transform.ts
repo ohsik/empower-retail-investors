@@ -1,5 +1,4 @@
-import { Data } from "../../types";
-import { Stock, Crypto, Option } from "../../types";
+import { Data, Stock, Option, Crypto, Dividend, Fee } from "../../types";
 
 /*
   fetchedData is Robnhood's data
@@ -8,7 +7,6 @@ import { Stock, Crypto, Option } from "../../types";
   TODO: convert the data to the Data format
 */
 export function dataTransform(fetchedData: any): Data {
-  console.log({fetchedData})
 
   // TODO: decide if we want to exclude cancelled, canceled, failed, voided, deleted orders
   // or keep it but exclude on Profit/Loss calculation
@@ -16,7 +14,7 @@ export function dataTransform(fetchedData: any): Data {
 
   // Stocks data transformation
   const stocks: Stock[] = fetchedData.data.orders.results.map((stock: any) => {
-    return {
+    return { 
       id: stock.id,
       symbol: stock.symbol ?? stock.instrument,
       price: stock.average_price ?? stock.price,
@@ -24,7 +22,7 @@ export function dataTransform(fetchedData: any): Data {
       fees: stock.fees,
       side: stock.side,
       executionDate: stock.updated_at
-    };
+    }
   });
 
   // Options data transformation
@@ -41,7 +39,7 @@ export function dataTransform(fetchedData: any): Data {
         };
       });
 
-      return {
+      return { 
         id: option.id,
         symbol: option.chain_symbol,
         price: option.price,
@@ -71,43 +69,43 @@ export function dataTransform(fetchedData: any): Data {
   });
 
   // Dividends data transformation
-  const dividends = fetchedData.data.dividends.results.map((dividend: any) => {
+  const dividends: Dividend[] = fetchedData.data.dividends.results.map((dividend: any) => {
     return {
       id: dividend.id,
       symbol: dividend.symbol ?? dividend.instrument,
       amount: dividend.amount,
       position: dividend.position,
-      excutionDate: dividend.payable_date,
+      executionDate: dividend.payable_date, 
     };
   });
 
   // Margin interest data transformation
-  const marginInterest = fetchedData.data.margin_interest_charges.results.map((fee: any) => {
+  const marginInterest: Fee[] = fetchedData.data.margin_interest_charges.results.map((fee: any) => {
     return {
       id: fee.id,
       type: 'marginInterest',
       amount: fee.amount,
-      excutionDate: fee.created_at,
-    };
+      executionDate: fee.created_at,
+    }
   });
 
   // Subscription fees data transformation
-  const subscriptionFees = fetchedData.data.subscription_fees.results.map((fee: any) => {
+  const subscriptionFees: Fee[] = fetchedData.data.subscription_fees.results.map((fee: any) => {
     return {
       id: fee.id,
       type: 'subscriptionFee',
       amount: fee.amount,
-      excutionDate: fee.created_at,
-    };
+      executionDate: fee.created_at,
+    }
   });
   
   return {
-    stocks: stocks,
-    options: options,
-    crypto: crypto,
-    dividends: dividends,
-    marginInterest: marginInterest,
-    subscriptionFees: subscriptionFees,
+    stocks: { 'all': stocks },
+    options: { 'all':  options},
+    crypto: { 'all':  crypto},
+    dividends: { 'all':  dividends},
+    marginInterest: { 'all':  marginInterest},
+    subscriptionFees: { 'all':  subscriptionFees},
     timeSynced: fetchedData.timeSynced
   }
 }

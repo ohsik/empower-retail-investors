@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { Summary } from "../components/summary";
-import { AllData, Data } from '../../../../lib/types';
+import { AllData } from '../../../../lib/types';
 import { SelectedDataContext } from '../../context';
 
 type PortfolioProps = {
@@ -13,6 +13,7 @@ export function Portfolio({ data }: PortfolioProps): JSX.Element {
   
   return (
     <div>
+      <h1 className="text-xl font-bold my-4">Portfolio Summary</h1>
       {
         Object.entries(data as AllData).map(( [brokerage, data] ) => {
           return (
@@ -27,8 +28,11 @@ export function Portfolio({ data }: PortfolioProps): JSX.Element {
                 if(key === 'subscriptionFees') {
                   keyWording = 'Subscription Fees';
                 }
-
-                return <Summary key={`${brokerage}-${key}`} brokerage={selectedBrokerage === 'all' ? `All brokerages - ${keyWording}` : keyWording} data={value as Data} />
+                return (
+                  <div key={key} className='shadow-md mb-6 p-6'>
+                    <Summary timeKey={brokerage} dataKey={keyWording} data={value} />
+                  </div>
+                )
               }
             })
           )

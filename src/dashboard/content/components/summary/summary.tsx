@@ -1,25 +1,32 @@
 import React from "react";
 import { SlashDivider } from "../../../../../lib/ui/slash-divider";
-import { Data } from "../../../../../lib/types";
+import { DataArrays } from "../../../../../lib/types";
 
-interface SummaryProps {
-  brokerage?: string;
-  data?: Data | undefined;
+type SummaryProps = DataArrays & {
+  timeKey?: string;
+  dataKey?: string;
 }
 
-export function Summary({ brokerage, data }: SummaryProps): JSX.Element {
+export function Summary({ data, timeKey, dataKey }: SummaryProps): JSX.Element {
   return (
-    <div className="grid grid-cols-[5fr,7fr] gap-1 w-full rounded border mb-6 capitalize">
-      <div className="p-8 border-r border-gray-300">
-        <h2 className="text-xs uppercase mb-1 font-bold">Total Profit/Loss {brokerage && <i><SlashDivider /> <b className="text-primary">{brokerage}</b></i>}</h2>
-        <p className="text-2xl font-bold">$200.00</p>
+    <div className="grid grid-cols-[4fr,8fr] gap-1 w-full rounded border shadow-sm capitalize">
+      <div className="p-8 border-gray-300">
+        <h2 className="text-xs capitalize mb-1">
+          Data from
+        </h2>
+        <p className="text-md font-semibold my-1">
+          🏦 {dataKey}<br />
+        </p>
+        <p className="text-md font-semibold my-1">
+          🗓️ {timeKey ?? 'All Time'}
+        </p>
       </div>
       <div className="p-8">
-        <h2 className="text-xs uppercase mb-1 font-bold">Trading Performance <SlashDivider /> <span className="italic">Dec 20, 2023 to Dec 30, 2023</span></h2>
-        
-        <p className="mt-2">
-          🚀 Wins: 11 ($66,651.77) 
-          💔 Losses: 15 (-$74,283.45)
+        <h2 className="text-xs capitalize mb-1">Total Profit/Loss</h2>
+        <p className="text-2xl font-bold">$200.00</p>
+        <p className="mt-1">
+          🚀 Wins: 11 ($66,651.77) <SlashDivider /> 
+          💔 Losses: 15 (-$74,283.45) <SlashDivider /> 
           🌟 Winning Percentage: 42%
         </p>
       </div>

@@ -26,13 +26,13 @@ export function Table({ data }: TableProps): JSX.Element {
         <table className="w-full rounded border capitalize">
           <thead>
             <tr className="text-xxs text-left border-b uppercase">
-              <th className="p-4">Symbol</th>
-              <th className="p-4">Quantity</th>
-              <th className="p-4">Price</th>
-              <th className="p-4">Side</th>
-              <th className="p-4">Fees</th>
-              <th className="p-4">Profit/Loss</th>
-              <th className="p-4">Date</th>
+              <th className="p-4 py-2">Symbol</th>
+              <th className="p-4 py-2">Quantity</th>
+              <th className="p-4 py-2">Price</th>
+              <th className="p-4 py-2">Side</th>
+              <th className="p-4 py-2">Fees</th>
+              <th className="p-4 py-2">Profit/Loss</th>
+              <th className="p-4 py-2">Date</th>
             </tr>
           </thead>
           <tbody>
