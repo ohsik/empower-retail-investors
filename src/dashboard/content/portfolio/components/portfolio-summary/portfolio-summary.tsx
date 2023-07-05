@@ -43,7 +43,7 @@ export function PortfolioSummary({ totalsFromTradingTypesObj, grandTotal, isAllB
                   return (
                     <li key={tradingType} className='p-2 border-t grid grid-cols-[1fr,auto] justify-between dark:border-zinc-800'>
                       <span>{tradingTypeName}:</span>
-                      <span className={`${grandTotal && (grandTotal === 0 ? `text-[inherit]` : ((grandTotal) > 0 ? `text-[#22c55d]` : `text-[#ef4444]`))}`}>
+                      <span className={`font-semibold ${totalPL && (totalPL === 0 ? `text-[inherit]` : (totalPL > 0 ? `text-[#22c55d]` : `text-[#ef4444]`))}`}>
                         {toUSD(totalPL as number)}
                       </span>
                     </li>

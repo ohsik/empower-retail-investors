@@ -11,7 +11,7 @@ type UsePopupReturns = {
   isFetchDataExist: boolean;
   currentUrl: string | null;
   syncErrorMessage: string | null;
-  syncedTime?: string;
+  timeSynced?: string;
   isCurrentBrokageSupported: boolean;
 };
 
@@ -28,7 +28,7 @@ const port = chrome.runtime.connect();
 export function usePopup(): UsePopupReturns {
   const [isSyncing, setIsSyncing] = useState(false)
   const [isFetchDataExist, setIsFetchDataExist] = useState(false)
-  const [syncedTime, setSyncedTime] = useState<string>('')
+  const [timeSynced, settimeSynced] = useState<string>('')
   const [syncErrorMessage, setSyncErrorMessage] = useState(null)
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
   const [currentBrokage, setCurrentBrokage] = useState<keyof typeof brokerageUrls | undefined>(undefined);
@@ -42,7 +42,7 @@ export function usePopup(): UsePopupReturns {
       setIsFetchDataExist(allKeys.some((k) => k === currentBrokageDataKey))
 
       if(currentBrokage) {
-        setSyncedTime(items[currentBrokageDataKey].timeSynced)
+        settimeSynced(items[currentBrokageDataKey]?.timeSynced)
       }
     });
 
@@ -70,7 +70,7 @@ export function usePopup(): UsePopupReturns {
     
     port.onMessage.addListener((message)=>  {
       if(message && !message.error) {
-        setSyncedTime(message[localFetchedDataName(currentBrokage)].timeSynced)
+        settimeSynced(message[localFetchedDataName(currentBrokage)]?.timeSynced)
         setIsFetchDataExist(true)
         setIsSyncing(false)
       } else {
@@ -92,7 +92,7 @@ export function usePopup(): UsePopupReturns {
     isFetchDataExist,
     currentUrl,
     syncErrorMessage,
-    syncedTime,
+    timeSynced,
     isCurrentBrokageSupported,
   }
 }

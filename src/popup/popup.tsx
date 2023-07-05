@@ -14,7 +14,7 @@ export function Popup(): JSX.Element {
     isFetchDataExist,
     currentUrl,
     syncErrorMessage,
-    syncedTime,
+    timeSynced,
     isCurrentBrokageSupported,
   } = usePopup();
 
@@ -47,7 +47,7 @@ export function Popup(): JSX.Element {
       }
 
       {isCurrentBrokageSupported && currentBrokage && !syncErrorMessage && 
-        <p className="text-xs italic my-1">{syncedTime ? 'Last synced at ' + moment(syncedTime).format('MMM Do YYYY, hh:mm:ss A') : 'Click Sync data button to get your first report!'}</p>
+        <p className="text-xs italic my-1">{timeSynced ? 'Last synced at ' + moment(timeSynced).format('MMM Do YYYY, hh:mm:ss A') : 'Click Sync data button to get your first report!'}</p>
       }
     </main>
   );

@@ -38,6 +38,13 @@ export function About({}: AboutProps): JSX.Element {
       </p>
 
       <p>Current version: v 0.0.1</p>
+
+      <h2 className='text-xl my-4 font-bold'>Upcoming:</h2>
+      <ul className='list-disc list-inside'>
+        <li>Download CSV files by time duration</li>
+        <li>Better options calculation with options events</li>
+        <li>Bring more brokerages 🥵</li>
+      </ul>
     </div>
   )
 }

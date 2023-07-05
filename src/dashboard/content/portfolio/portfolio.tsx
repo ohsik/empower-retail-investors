@@ -29,7 +29,7 @@ export function Portfolio({ data }: PortfolioProps): JSX.Element {
         </>
       }
 
-      {/* A brockerage summary */}
+      {/* A brokerages summary */}
       {!isAllBrokeragesSelected && 
         <>
           <PortfolioSummary totalsFromTradingTypesObj={totalsFromTradingTypesObj} grandTotal={grandTotal} brokerage={selectedBrokerage} />

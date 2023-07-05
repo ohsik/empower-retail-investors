@@ -11,7 +11,7 @@ import { Data, Stock, Option, Crypto, Dividend, Fee } from "../../types";
   TODO: convert the data to the Data format
 */
 export function dataTransform(fetchedData: any): Data {
-  console.log({fetchedData})
+  // console.log({fetchedData})
   // TODO: decide if we want to exclude cancelled, canceled, failed, voided, deleted orders
   // or keep it but exclude on Profit/Loss calculation
   const INCLUDE_DATA = ["filled"];
