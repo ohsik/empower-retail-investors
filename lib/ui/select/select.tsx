@@ -15,7 +15,7 @@ export function Select({ arrayData, selectedOption, onChange }: SelectProps): JS
 
   return (
     <select
-      className="border rounded p-2 dark:bg-neutral-900 dark:text-slate-300 capitalize"
+      className="border rounded p-2 dark:bg-neutral-900 dark:text-slate-300 capitalize border-primary"
       onChange={handleChange}
       value={selectedOption}
     >

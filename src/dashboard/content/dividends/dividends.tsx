@@ -30,7 +30,7 @@ export function Dividends({ data }: DividendsProps): JSX.Element {
             return (
               <div key={key} id={key} className='shadow-md mb-12 p-6 dark:shadow-neutral-800'>
                 <Summary timeKey={timeKey} dataKey={dataKey} data={data} />
-                {!isAllBrokeragesSelected && <Table data={data} />}
+                <Table data={data} />
               </div>
             )
           });

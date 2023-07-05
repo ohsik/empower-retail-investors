@@ -19,6 +19,7 @@ export interface Leg {
   side: 'buy' | 'sell';
   executionPrice: number;
   expirationDate: string;
+  quantity: number;
 }
 
 export interface OptionsWithKey {

@@ -44,6 +44,7 @@ export function dataTransform(fetchedData: any): Data {
         side: leg.side,
         strikePrice: convertStringToNumber(leg.strike_price),
         expirationDate: leg.expiration_date,
+        quantity: convertStringToNumber(option.quantity), // TODO: get actual quantity from each leg executions
         executionPrice: convertStringToNumber(option.price) // TODO: probably need a function to get avg execution price from [let.executions[0].price and let.executions[0].quantity]
       };
     });
@@ -58,7 +59,7 @@ export function dataTransform(fetchedData: any): Data {
       premium: convertStringToNumber(option.premium),
       executionDate: executionDate,
       legs: legs,
-      underlyingPrice: convertStringToNumber(option.underlying_price),
+      underlyingPrice: option.underlying_price ? convertStringToNumber(option.underlying_price) : undefined,
     };
   });
 

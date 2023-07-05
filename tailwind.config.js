@@ -19,9 +19,6 @@ module.exports = {
         'primary-light': '#E5B3FF',
         'secondary': '#FFC500',
       },
-      borderOpacity: {
-        DEFAULT: '0.2',
-      },
       borderWidth: {
         DEFAULT: '0.4px',
       }

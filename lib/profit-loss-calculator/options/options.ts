@@ -27,16 +27,12 @@ export function optionsProfitLossCalculator(orders: Option[]): OptionsWithPLType
     let profitOrLoss = 0
     let tradePL = 0
 
-    // Replace order.premium with actual execution price
-    const executionPrice = order.legs[0].executionPrice;
     const orderQuantity = order.quantity;
-    const isMultiLegsOrder = order.legs.length > 1
+    const orderExecutionPrice = order.premium;
 
     order.legs.forEach((leg) => {
 
       const optionKey = `${order.symbol}+${leg.strikePrice}+${leg.optionType}+${leg.expirationDate}` // e.g. AMZN+93.0000+call+2022-12-16
-      // if more than 1 leg, assign avg premium price from number of legs
-      const orderExecutionPrice = isMultiLegsOrder ? executionPrice / order.legs.length : executionPrice
       const orderPositionSide = `${leg.side}+${leg.positionEffect}` // e.g. sell+open
 
       // If optionsKey exist, keep track of quantity, profit, loss, avgPrice
