@@ -1,15 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CSVLink } from "react-csv";
 
-type TableControlProps = {
+import { Data, DataArrays } from "../../../../../lib/types";
+import { sidebarMenu } from "../../../../../lib/consts/sidebar-menu";
+import { useLocation } from "react-router-dom";
+import { SelectedDataContext } from "../../../context";
+
+type TableControlProps = DataArrays & {
   showTable: boolean;
-  downloadCVS: () => void;
   showHide: () => void;
 };
 
-export function TableControl({ showTable, downloadCVS, showHide }: TableControlProps): JSX.Element {
+export function TableControl({ showTable, data, showHide }: TableControlProps): JSX.Element {
+  const location = useLocation();
+  const { selectedBrokerage, selectedTimeDuration } = useContext(SelectedDataContext);
+
+  const currentRoute = location.pathname;
+  const tradingType = sidebarMenu.find((item) => item.url === currentRoute)?.name as keyof Data;
+  
   return (
     <div className="text-right text-xs grid grid-cols-[130px,60px] justify-end items-center my-4">
-      <button onClick={downloadCVS} className="mr-2 border rounded-3xl px-4 py-[5px]">Download CSV</button>
+      {data && 
+        <CSVLink data={data} filename={`${tradingType} - ${selectedBrokerage} - ${selectedTimeDuration} - Empower Retail Investors`}>
+          <span className="mr-2 border rounded-3xl px-4 py-[5px]">Download CSV</span>
+        </CSVLink>
+      }
       <button onClick={showHide} className="border rounded-3xl px-4 text-lg">{showTable ? '🙈' : '🙉'}</button>
     </div>
   )

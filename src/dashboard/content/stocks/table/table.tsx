@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { Stock } from "../../../../../lib/types";
 import { formatDateTime } from "../../../../../lib/helpers/date-format";
 import { toUSD } from "../../../../../lib/helpers/to-usd";
@@ -14,14 +15,10 @@ export function Table({ data }: TableProps): JSX.Element {
   function showHide() {
     setShowTable(!showTable);
   }
-
-  function downloadCVS() {
-    alert('Download CSV file is coming soon. Stay tuned 🙌');
-  }
-
+  
   return (
     <div>
-      <TableControl showHide={showHide} downloadCVS={downloadCVS} showTable={showTable} />
+      <TableControl showHide={showHide} data={data} showTable={showTable} />
       {showTable && 
         <table className="w-full rounded border capitalize text-xs dark:border-zinc-800">
           <thead>

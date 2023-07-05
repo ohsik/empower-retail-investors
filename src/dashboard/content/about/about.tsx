@@ -37,11 +37,10 @@ export function About({}: AboutProps): JSX.Element {
       <p className='my-8'><a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo for Empower Retail Investors</a> will be public eventually as we get more contributors.<br />(current team: 🤖 ChatGPT and 😼 I)
       </p>
 
-      <p>Current version: v 0.0.1</p>
+      <p>Current version: v 0.0.2</p>
 
       <h2 className='text-xl my-4 font-bold'>Upcoming:</h2>
       <ul className='list-disc list-inside'>
-        <li>Download CSV files by time duration</li>
         <li>Better options calculation with options events</li>
         <li>Bring more brokerages 🥵</li>
       </ul>

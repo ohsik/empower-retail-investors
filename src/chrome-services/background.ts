@@ -56,7 +56,7 @@ function getAuthToken(details: any){
   if(currentBrokerage) {
     const authHeader = details.requestHeaders?.filter((item: { name: string }) => item.name === 'Authorization');
     const authOrgin = details.requestHeaders?.filter((item: { name: string }) => item.name === 'Origin' || item.name === 'Referer');
-    const isAuthOriginMatchesCurrentBrokerage = authOrgin[0] && authOrgin[0].value.includes(brokerageUrls[currentBrokerage]);
+    const isAuthOriginMatchesCurrentBrokerage = authOrgin[0] && authOrgin[0].value.includes(brokerageUrls[currentBrokerage as keyof typeof brokerageUrls]);
 
     if(authHeader && isAuthOriginMatchesCurrentBrokerage) {
       const authToken = authHeader[0] && authHeader[0].value;

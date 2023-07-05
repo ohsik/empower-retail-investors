@@ -133,8 +133,8 @@ export function LineGraph({ graphData, reversedGraphData, section, durationSelec
     bodySvg.append('path')
     .datum(graphData)
     .attr('fill', 'none')
-    .attr('stroke', '#22c55d') // red #ef4444
-    .attr('stroke-width', 4)
+    .attr('stroke', '#c600e5') // red #ef4444
+    .attr('stroke-width', 3)
     .attr('stroke-linejoin', 'round')
     .attr('stroke-linecap', 'round')
     .attr('d', line)
@@ -199,7 +199,7 @@ export function LineGraph({ graphData, reversedGraphData, section, durationSelec
   }
 
   return (
-    <div id={`d3_graph_${section}`} className="mt-[14px] mb-20 p-10 pl-[120px] pt-[100px] pr-[100px] rounded shadow-md bg-white border-t border-gray-50 dark:bg-gray-800 dark:border-gray-700">
+    <div id={`d3_graph_${section}`} className="mt-[14px] mb-20 p-10 pl-[120px] pt-[100px] pr-[100px] rounded shadow-md bg-white border-gray-50 dark:bg-neutral-800 dark:border-gray-700">
       {section}
     </div>
   )
