@@ -58,7 +58,7 @@ export function dataByTimeDuration(duration: string, localData: any): Promise<Da
         itemCount === localData?.all.length
           ? resolve(dataByDuration)
           : reject("dataByTimeDuration setTimeout failed");
-      }, 500);
+      }, 200);
     } else {
       itemCount === localData?.all.length
         ? resolve(dataByDuration)

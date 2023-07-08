@@ -21,8 +21,8 @@ export function PortfolioSummary({ totalsFromTradingTypesObj, grandTotal, isAllB
 
             {brokerage && <p className="text-xl font-semibold my-1">{brokerage}</p>}
 
-            <p className={`text-xl font-semibold my-1 ${isAllBrokerages && `text-primary`}`}>
-              {isAllBrokerages && 'Grand Total Profit/Loss from All Brokerages and '} All Time Summary
+            <p className={`text-xl font-semibold my-1`}>
+              {isAllBrokerages && <span className="text-primary">Grand Total Profit/Loss from All Brokerages<br /></span>} All Time Summary
             </p>
 
             <p className="text-xs opacity-50 italic normal-case mt-4">

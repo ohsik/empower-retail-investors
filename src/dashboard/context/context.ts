@@ -15,5 +15,5 @@ export const SelectedDataContext = createContext<Conext>({
   selectedBrokerage: Brokerages.All,
   selectedTimeDuration: TimeDurationSelectType.All,
   setSelectedTimeDuration: () => {},
-  originalTransformedData: undefined,
+  originalTransformedData: {},
 });

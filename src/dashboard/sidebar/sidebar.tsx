@@ -12,12 +12,11 @@ type SidebarProps = {
 };
 
 export function Sidebar({ availableBrokerages }: SidebarProps ): JSX.Element {
+  const { selectedBrokerage, selectedTimeDuration } = useContext(SelectedDataContext);
   const navigate = useNavigate();
   const location = useLocation();
   const currentRoute = location.pathname;
   const dataKey = sidebarMenu.find((item) => item.url === currentRoute)?.key as keyof Data;
-  
-  const { selectedBrokerage, selectedTimeDuration } = useContext(SelectedDataContext);
 
   return (
     <div className="p-10 fixed">

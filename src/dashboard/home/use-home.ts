@@ -41,8 +41,6 @@ export function useHome(): UseHomeReturn {
 
   useEffect(() => {
     if (fetchedData) {
-      setIsLoading(true);
-
       const cloneData = structuredClone(fetchedData);
       const regex = /fetchedData-(\w+)/;
       let data: AllData = {};

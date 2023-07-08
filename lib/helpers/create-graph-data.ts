@@ -17,7 +17,7 @@ export function createGraphData(data: Data): any {
           tradingTypeData.push({
             date: timeKey.trim(),
             value: total,
-            tooltipContent: `<b>Duration: </b> ${timeKey.trim()}<br /><b>P/L: </b> ${total}`,
+            tooltipContent: `<b>Duration: </b> ${timeKey.trim()}<br /><b>P/L: </b> ${total}`, // not being used yet on line graph
           });
         }
         

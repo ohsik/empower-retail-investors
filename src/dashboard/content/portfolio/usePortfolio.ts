@@ -8,7 +8,7 @@ import { SelectedDataContext } from "../../context";
 */
 
 type UsePortfolioReturn = {
-  totalsFromTradingTypesObj: Record<string, number | undefined>;
+  totalsFromTradingTypesObj: Record<string, number>;
   grandTotal: number;
   selectedBrokerage: string;
   selectedTimeDuration: string;
