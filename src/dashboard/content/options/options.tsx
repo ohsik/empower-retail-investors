@@ -5,7 +5,6 @@ import { Table } from "./table";
 import { AllData, OptionsWithKey } from '../../../../lib/types';
 import { handleContentSelectData } from '../../../../lib/helpers/handle-content-select-data';
 import { SelectedDataContext } from '../../context';
-import { Link } from 'react-router-dom';
 import { AllBrokeragesWarning } from '../components/all-brokerages-warning';
 
 type OptionsProps = {

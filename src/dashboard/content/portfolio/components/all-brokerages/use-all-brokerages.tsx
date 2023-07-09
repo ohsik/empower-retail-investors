@@ -36,7 +36,9 @@ export function useAllBrokerages(): UseAllBrokeragesReturn {
 
   const perBrokerage = Object.entries(selectedOriginalData).map(([brokerage, dataWithTimeKey]) => {
     const perTradeType = Object.entries(dataWithTimeKey).map(([tradingType, dataWithTimeKey]) => {
-      const totalPL = totalSumOfProfitOrLoss(dataWithTimeKey.all, tradingType);
+      const results = totalSumOfProfitOrLoss(dataWithTimeKey.all, tradingType);
+      const totalPL = results?.totalPL;
+
       if (totalPL) {
         return { [tradingType]: totalPL };
       }

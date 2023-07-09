@@ -11,6 +11,7 @@ export function Home() {
   const { data, originalTransformedData, isLoading, availableBrokerages, selectedBrokerage, selectedTimeDuration, setSelectedTimeDuration } = useHome();
 
   return (
+    // TODO: add current route to context(maybe in the furture)
     <SelectedDataContext.Provider value={{ originalTransformedData, selectedBrokerage, selectedTimeDuration, setSelectedTimeDuration }}>
       <div className="grid grid-cols-[220px,1fr] gap-4 text-sm">
         <div>

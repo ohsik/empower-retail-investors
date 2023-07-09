@@ -1,43 +1,45 @@
 import moment from "moment";
-import { AllData } from "../types";
 
 type DataByTimeDurationReturn = {
-  [key: string]: any[]
-}
+  [key: string]: any[];
+};
 
-export function dataByTimeDuration(duration: string, localData: any): Promise<DataByTimeDurationReturn> | string {
-
+export function dataByTimeDuration(
+  duration: string,
+  localData: any
+): Promise<DataByTimeDurationReturn> | string {
   const dataByDuration: DataByTimeDurationReturn = {};
   let itemCount = 0;
 
-  // Because timeSynced: '2023-07-02T20:33:16.290Z' is string from localData
-  if(typeof localData === 'string') {
-    return localData
+  if (typeof localData === "string") {
+    return localData;
   }
 
-  localData?.all.forEach((order: { executionDate: string; }) => {
+  localData?.all.forEach((order: { executionDate: string }) => {
     let durationSelected;
 
     switch (duration) {
       case "yearly":
-        durationSelected = moment(order.executionDate).format("Y") + " ";
+        durationSelected = moment(order.executionDate).format("YYYY") + " ";
         break;
       case "monthly":
         durationSelected =
-          moment(order.executionDate).format("Y-MM") + " ";
+          moment(order.executionDate).format("YYYY-MM") + " ";
         break;
       case "weekly":
         durationSelected =
           moment(moment(order.executionDate).startOf("week")).format(
-            "Y-MM-DD"
+            "YYYY-MM-DD"
           ) +
           " to " +
-          moment(moment(order.executionDate).endOf("week")).format("Y-MM-DD") +
+          moment(moment(order.executionDate).endOf("week")).format(
+            "YYYY-MM-DD"
+          ) +
           " ";
         break;
       case "daily":
         durationSelected =
-          moment(order.executionDate).format("Y-MM-DD") + " ";
+          moment(order.executionDate).format("YYYY-MM-DD") + " ";
         break;
       default:
         durationSelected = "all";
@@ -52,17 +54,23 @@ export function dataByTimeDuration(duration: string, localData: any): Promise<Da
     itemCount += 1;
   });
 
-  return new Promise((resolve, reject) => {
+  const createPromise = (resolve: any, reject: any) => {
     if (localData?.all.length > 700) {
       setTimeout(() => {
-        itemCount === localData?.all.length
-          ? resolve(dataByDuration)
-          : reject("dataByTimeDuration setTimeout failed");
+        if (itemCount === localData?.all.length) {
+          resolve(dataByDuration);
+        } else {
+          reject("dataByTimeDuration setTimeout failed");
+        }
       }, 200);
     } else {
-      itemCount === localData?.all.length
-        ? resolve(dataByDuration)
-        : reject("dataByTimeDuration failed");
+      if (itemCount === localData?.all.length) {
+        resolve(dataByDuration);
+      } else {
+        reject("dataByTimeDuration failed");
+      }
     }
-  });
+  };
+
+  return new Promise(createPromise);
 }

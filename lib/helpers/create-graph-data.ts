@@ -11,16 +11,16 @@ export function createGraphData(data: Data): any {
       const tradingTypeData = [];
 
       for (const [timeKey, dataArray] of Object.entries(dataWithTimeKey)) {
-        const total = totalSumOfProfitOrLoss(dataArray, tradingTypeKey);
+        const results = totalSumOfProfitOrLoss(dataArray, tradingTypeKey);
+        const totalPL = results?.totalPL;
 
-        if(total !== 0) {
+        if(totalPL !== 0) {
           tradingTypeData.push({
             date: timeKey.trim(),
-            value: total,
-            tooltipContent: `<b>Duration: </b> ${timeKey.trim()}<br /><b>P/L: </b> ${total}`, // not being used yet on line graph
+            value: totalPL,
+            tooltipContent: `<b>Duration: </b> ${timeKey.trim()}<br /><b>P/L: </b> ${totalPL}`, // not being used yet on line graph
           });
         }
-        
       }
 
       graphData[tradingTypeKey] = tradingTypeData;

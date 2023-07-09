@@ -1,6 +1,6 @@
 import React from "react";
-import { toUSD } from "../../../../../../lib/helpers/to-usd";
 import { sidebarMenu } from "../../../../../../lib/consts/sidebar-menu";
+import { PriceColored } from "../../../../../../lib/ui/price-colored";
 
 type PortfolioSummaryProps = {
   totalsFromTradingTypesObj: Record<string, number | undefined>;
@@ -31,8 +31,8 @@ export function PortfolioSummary({ totalsFromTradingTypesObj, grandTotal, isAllB
           </div>
           <div className="p-8">
             <h2 className="text-xs capitalize mb-1">Total Profit/Loss</h2>
-            <p className={`text-2xl font-bold ${grandTotal && (grandTotal === 0 ? `text-[inherit]` : ((grandTotal) > 0 ? `text-[#22c55d]` : `text-[#ef4444]`))}`}>
-              {toUSD(grandTotal)}
+            <p className={`text-2xl font-bold`}>
+              <PriceColored price={grandTotal} />
             </p>
 
             <ul className="text-sm mt-6">
@@ -43,8 +43,8 @@ export function PortfolioSummary({ totalsFromTradingTypesObj, grandTotal, isAllB
                   return (
                     <li key={tradingType} className='p-2 border-t grid grid-cols-[1fr,auto] justify-between dark:border-zinc-800'>
                       <span>{tradingTypeName}:</span>
-                      <span className={`font-semibold ${totalPL && (totalPL === 0 ? `text-[inherit]` : (totalPL > 0 ? `text-[#22c55d]` : `text-[#ef4444]`))}`}>
-                        {toUSD(totalPL as number)}
+                      <span className={`font-semibold`}>
+                        <PriceColored price={totalPL as number} />
                       </span>
                     </li>
                   )

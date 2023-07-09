@@ -3,6 +3,7 @@ import { Crypto } from "../../../../../lib/types";
 import { formatDateTime } from "../../../../../lib/helpers/date-format";
 import { toUSD } from "../../../../../lib/helpers/to-usd";
 import { TableControl } from "../../components/table-control";
+import { PriceColored } from "../../../../../lib/ui/price-colored";
 
 export interface TableProps {
   data: (Crypto[] | undefined);
@@ -40,8 +41,8 @@ export function Table({ data }: TableProps): JSX.Element {
                   <td className="px-4 py-5">{Number(trade.quantity).toFixed(8)}</td>
                   <td className="px-4 py-5">{trade.side}</td>
                   <td className="px-4 py-5">{toUSD(trade.fees)}</td>
-                  <td className={`px-4 py-5 font-bold ${trade.profitOrLoss && (trade.profitOrLoss === 0 ? `text-[inherit]` : (trade.profitOrLoss > 0 ? `text-[#22c55d]` : `text-[#ef4444]`))}`}>
-                    {toUSD(trade.profitOrLoss ?? 0)}
+                  <td className={`px-4 py-5 font-bold`}>
+                    <PriceColored price={trade.profitOrLoss ?? 0} />
                   </td>
                   <td className="px-4 py-5">{formatDateTime(trade.executionDate)}</td>
                 </tr>

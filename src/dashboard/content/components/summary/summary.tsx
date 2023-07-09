@@ -2,8 +2,8 @@ import React from "react";
 import { SlashDivider } from "../../../../../lib/ui/slash-divider";
 import { DataArrays } from "../../../../../lib/types";
 import { totalSumOfProfitOrLoss } from "../../../../../lib/helpers/total-sum-of-profit-or-loss";
-import { toUSD } from "../../../../../lib/helpers/to-usd";
 import { dateKeyConvert } from "../../../../../lib/helpers/split-weekly-date-range";
+import { PriceColored } from "../../../../../lib/ui/price-colored";
 
 type SummaryProps = DataArrays & {
   timeKey?: string;
@@ -12,7 +12,9 @@ type SummaryProps = DataArrays & {
 }
 
 export function Summary({ data, timeKey, dataKey }: SummaryProps): JSX.Element {
-  const profitOrLoss = totalSumOfProfitOrLoss(data);
+  const results = totalSumOfProfitOrLoss(data);
+  const isDataTrades = results?.isTradeData;
+  const profitOrLoss = results?.totalPL;
 
   return (
     <div className="grid grid-cols-[4fr,8fr] gap-1 w-full rounded border shadow-sm capitalize dark:border-zinc-700">
@@ -31,13 +33,22 @@ export function Summary({ data, timeKey, dataKey }: SummaryProps): JSX.Element {
       </div>
       <div className="p-8">
         <h2 className="text-xs capitalize mb-1">Total Profit/Loss</h2>
-        <p className={`text-2xl font-bold ${profitOrLoss && (profitOrLoss === 0 ? `text-[inherit]` : (profitOrLoss > 0 ? `text-[#22c55d]` : `text-[#ef4444]`))}`}>{toUSD(profitOrLoss ?? 0)}</p>
-        <p className="mt-1 text-sm opacity-50">
-          {/* 🚀 Wins: 11 ($66,651.77) <SlashDivider /> 
-          💔 Losses: 15 (-$74,283.45) <SlashDivider /> 
-          🌟 Winning Percentage: 42% */}
-          🌟 Trading Performance coming soon...
-        </p>
+        <p className={`text-2xl font-bold`}><PriceColored price={profitOrLoss ?? 0} /></p>
+
+        {isDataTrades &&
+          (
+            profitOrLoss ? 
+              <p className="mt-1 text-sm">
+                🏆 Wins: <b>{results.wins}</b> (<PriceColored price={results.totalWinAmount ?? 0} />) <SlashDivider /> 
+                😭 Losses: <b>{results.losses}</b> (<PriceColored price={results.totalLossAmount ?? 0} />) <SlashDivider /> 
+                🌟 Winning Percentage: <b>{results.winningPercentage}%</b>
+              </p> 
+            :
+            <p className="mt-1 text-sm">🤷‍♀️ No P/L trades</p>
+          )
+        }
+
+        {!isDataTrades && <p className="mt-1 text-sm opacity-50 italic">Total amount of selected time duration</p>}
       </div>
     </div>
   )

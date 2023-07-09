@@ -20,7 +20,9 @@ export function usePortfolio(): UsePortfolioReturn {
   const selectedOriginalBrokerageData = (originalTransformedData && structuredClone(originalTransformedData[selectedBrokerage])) ?? {};
   
   const totalPLsFromTradingTypes = Object.entries(selectedOriginalBrokerageData).map(([tradingType, dataWithTimeKey]) => {
-    const totalPL = totalSumOfProfitOrLoss(dataWithTimeKey.all, tradingType);
+    const results = totalSumOfProfitOrLoss(dataWithTimeKey.all, tradingType);
+    const totalPL = results?.totalPL;
+    
     if(totalPL) {
       return { [tradingType]: totalPL }
     }
