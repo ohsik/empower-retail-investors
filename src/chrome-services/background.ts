@@ -26,21 +26,21 @@ function getCurrentBrokerage(currentUrl: string | null | undefined) {
 // Event listener for tab activation change
 chrome.tabs.onActivated.addListener(async () => {
   currentTab = await getCurrentTab();
-  currentBrokerage = getCurrentBrokerage(currentTab.url);
+  currentBrokerage = getCurrentBrokerage(currentTab?.url);
 });
 
 // Event listener for tab URL change
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (tab.active && changeInfo.url) {
     currentTab = tab;
-    currentBrokerage = getCurrentBrokerage(currentTab.url);
+    currentBrokerage = getCurrentBrokerage(currentTab?.url);
   }
 });
 
 // Get the current active tab when the popup is opened
 getCurrentTab().then(tab => {
   currentTab = tab;
-  currentBrokerage = getCurrentBrokerage(currentTab.url);
+  currentBrokerage = getCurrentBrokerage(currentTab?.url);
 });
 
 
