@@ -50,8 +50,8 @@ export async function getUserData(currentBrokerage: Brokerages | undefined, auth
   }
 
   const fetchedData = await Promise.all(
-    Object.entries(BROKERAGES_VARS[currentBrokerage].endpoints).map(async ([key, value]) => {
-      const data = await fetchData(authToken, value)
+    Object.entries(BROKERAGES_VARS[currentBrokerage].endpoints).map(async ([key, endpointUrl]) => {
+      const data = await fetchData(authToken, endpointUrl)
       return { [key]: data };
     })
   );
@@ -100,6 +100,8 @@ export async function getUserData(currentBrokerage: Brokerages | undefined, auth
     chrome.storage.local.set(allData)
     return allData
   } else {
-    return 'failed 🥲'
+    return {
+      error: `${currentBrokerage} data-access failed to save data.`
+    }
   }
 }

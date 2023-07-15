@@ -4,13 +4,13 @@
   "name": "Empower retail investors",
   "description": "Empowering retail investors by providing the right tools to enable their participation and success in financial markets.",
 	"permissions": ["webRequest", "storage", "unlimitedStorage", "tabs"],
-	"host_permissions": ["https://*.robinhood.com/*", "https://*.webull.com/*"],
+	"host_permissions": ["https://*.robinhood.com/*", "https://*.webull.com/*", "https://*.thinkorswim.com/*", "https://*.tdameritrade.com/*"],
 	"background": {
     "service_worker": "./static/js/background.js"
   },
 	"content_scripts": [
 		{
-			"matches": ["https://*.robinhood.com/*", "https://*.webull.com/*"],
+			"matches": ["https://*.robinhood.com/*", "https://*.webull.com/*", "https://*.thinkorswim.com/*", "https://*.tdameritrade.com/*"],
 			"js": ["./static/js/content.js"]
 		}
 	],

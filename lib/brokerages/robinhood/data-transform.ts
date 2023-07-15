@@ -5,7 +5,7 @@ import { stocksProfitLossCalculator } from "../../profit-loss-calculator/stocks"
 import { Data, Stock, Option, Crypto, Dividend, Fee } from "../../types";
 
 /*
-  fetchedData is Robnhood's data
+  fetchedData is Robinhood's data
   Data is the data format we want to use in the application
 
   TODO: convert the data to the Data format

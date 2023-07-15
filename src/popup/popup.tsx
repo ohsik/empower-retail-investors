@@ -43,7 +43,7 @@ export function Popup(): JSX.Element {
       }
 
       {syncErrorMessage && 
-        <p className="text-xs italic my-1">{`${syncErrorMessage} Please login to ${currentBrokerage} and try again.`}</p>
+        <p className="text-xs italic my-1">{`${syncErrorMessage} Make sure you are logged in, reload the page then sync again.`}</p>
       }
 
       {isCurrentBrokerageSupported && currentBrokerage && !syncErrorMessage && 

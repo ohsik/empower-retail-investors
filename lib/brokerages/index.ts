@@ -8,30 +8,34 @@ import {
   dataTransform as robinhood_dataTransform,
 } from './robinhood';
 
-// import { GET_AUTH_TOKEN_URLS as webull_getAuthTokenUrls } from './webull';
+import { 
+  GET_ACCOUNT_NUMBER as thinkorswim_getAuthTokenUrls,
+  ENDPOINTS as thinkorswim_endpoints,
+  getUserData as thinkorswim_getUserData ,
+  dataTransform as thinkorswim_dataTransform,
+} from './thinkorswim';
 
-type BrokeragesUrls = {
+// TODO: re-visit this cause it's getting too messy
+type BROKERAGES_VARS_TYPE = {
   [key: string]: {
-    getAuthTokenUrls: string[];
-    endpoints: {
-      [key: string]: string;
-    }
-    getUserData: (currentBrokerage: Brokerages | undefined, authToken?: string) => Promise<any>; // TODO: update any
+    [key: string]: any;
+    endpoints: { [key: string]: string } | ((arg: string) => { [key: string]: string });
+    getUserData: (currentBrokerage: Brokerages | undefined, authToken?: string) => Promise<any>;
     transformData: (fetchedData: any) => Data;
   }
 };
 
-export const BROKERAGES_VARS: BrokeragesUrls = {
+export const BROKERAGES_VARS: BROKERAGES_VARS_TYPE = {
   [Brokerages.Robinhood]: {
     getAuthTokenUrls: robinhood_getAuthTokenUrls,
     endpoints: robinhood_endpoints,
     getUserData: robinhood_getUserData,
     transformData: robinhood_dataTransform,
   },
-  // TODO: Add Webull support
-  // [Brokerages.Webull]: {
-  //   getAuthTokenUrls: webull_getAuthTokenUrls,
-  //   endpoints: robinhood_endpoints,
-  //   getUserData: robinhood_getUserData,
-  // }
+  [Brokerages.Thinkorswim]: {
+    getAccountNumber: thinkorswim_getAuthTokenUrls,
+    endpoints: thinkorswim_endpoints,
+    getUserData: thinkorswim_getUserData,
+    transformData: thinkorswim_dataTransform,
+  },
 }
