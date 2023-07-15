@@ -78,11 +78,20 @@ chrome.webRequest.onBeforeSendHeaders.addListener(getAuthToken,
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (message)=>  {
     if(message.FETCH_USER_DATA) {
+
+      // TODO: this works for Robinhood but ThinkOrSwim needs to get authToken from sesseonStorage.
       const authToken = await new Promise<string>((resolve) => {
         chrome.storage.local.get(localAuthTokenName(currentBrokerage), ({ [localAuthTokenName(currentBrokerage)]: authToken }) => {
           resolve(authToken);
         });
       });
+
+      if(!authToken) {
+        const error = {
+          error: `${currentBrokerage} authToken is missing.`
+        }
+        port.postMessage(error);
+      }
 
       const reponse = currentBrokerage && await BROKERAGES_VARS[currentBrokerage]?.getUserData(currentBrokerage, authToken);
 

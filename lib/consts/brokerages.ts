@@ -34,6 +34,6 @@ export const brokerageUrls = {
 
 export const supportedBrokerages: Array<Brokerages> = [
   Brokerages.Robinhood,
-  // Brokerages.Thinkorswim,
+  Brokerages.Thinkorswim,
   // Brokerages.Webull
 ];

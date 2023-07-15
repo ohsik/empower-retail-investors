@@ -46,7 +46,7 @@ export async function getUserData(currentBrokage: Brokerages | undefined, authTo
   }
 
   if(!authToken) {
-    throw Error('authToken is missing.')
+    throw Error('Robinhood authToken is missing.')
   }
 
   const fetchedData = await Promise.all(
