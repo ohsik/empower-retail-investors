@@ -36,10 +36,11 @@ export function useAllBrokerages(): UseAllBrokeragesReturn {
 
   const perBrokerage = Object.entries(selectedOriginalData).map(([brokerage, dataWithTimeKey]) => {
     const perTradeType = Object.entries(dataWithTimeKey).map(([tradingType, dataWithTimeKey]) => {
+
       const results = totalSumOfProfitOrLoss(dataWithTimeKey.all, tradingType);
       const totalPL = results?.totalPL;
 
-      if (totalPL) {
+      if (totalPL !== undefined && totalPL !== null) {
         return { [tradingType]: totalPL };
       }
     });
@@ -70,13 +71,14 @@ export function useAllBrokerages(): UseAllBrokeragesReturn {
 function calculateTotalSummary({ totalsPerBrokerageObj }: CalculateTotalSummaryProps): BrokerageData {
   return Object.values(totalsPerBrokerageObj).reduce((summary, brokerage) => {
     const totalByTradeType = brokerage.totalByTradeType;
-    summary.totalByTradeType.stocks += totalByTradeType.stocks;
-    summary.totalByTradeType.options += totalByTradeType.options;
-    summary.totalByTradeType.crypto += totalByTradeType.crypto;
-    summary.totalByTradeType.dividends += totalByTradeType.dividends;
-    summary.totalByTradeType.marginInterest += totalByTradeType.marginInterest;
-    summary.totalByTradeType.subscriptionFees += totalByTradeType.subscriptionFees;
-    summary.grandTotal += brokerage.grandTotal;
+
+    summary.totalByTradeType.stocks += totalByTradeType.stocks ? totalByTradeType.stocks : 0;
+    summary.totalByTradeType.options += totalByTradeType.options ? totalByTradeType.options : 0;
+    summary.totalByTradeType.crypto += totalByTradeType.crypto ? totalByTradeType.crypto : 0;
+    summary.totalByTradeType.dividends += totalByTradeType.dividends ? totalByTradeType.dividends : 0;
+    summary.totalByTradeType.marginInterest += totalByTradeType.marginInterest ? totalByTradeType.marginInterest : 0;
+    summary.totalByTradeType.subscriptionFees += totalByTradeType.subscriptionFees ? totalByTradeType.subscriptionFees : 0;
+    summary.grandTotal += brokerage.grandTotal ? brokerage.grandTotal : 0;
     return summary;
   }, {
     totalByTradeType: {

@@ -2,7 +2,7 @@ import React from "react";
 import { useAllBrokerages } from "./use-all-brokerages";
 import { PortfolioSummary } from "../portfolio-summary";
 
-export function AllBroderages(): JSX.Element {
+export function AllBrokerages(): JSX.Element {
   const { totalsPerBrokerageObj, grandTotalSummaryOfAll } = useAllBrokerages();
 
   return (

@@ -14,7 +14,7 @@ export function createGraphData(data: Data): any {
         const results = totalSumOfProfitOrLoss(dataArray, tradingTypeKey);
         const totalPL = results?.totalPL;
 
-        if(totalPL !== 0) {
+        if(totalPL !== 0 && totalPL !== undefined && totalPL !== null) {
           tradingTypeData.push({
             date: timeKey.trim(),
             value: totalPL,

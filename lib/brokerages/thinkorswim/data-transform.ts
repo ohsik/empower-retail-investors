@@ -1,7 +1,6 @@
-// import { cryptoProfitLossCalculator } from "../../profit-loss-calculator/crypto";
-// import { optionsProfitLossCalculator } from "../../profit-loss-calculator/options";
+
 import { stocksProfitLossCalculator } from "../../profit-loss-calculator/stocks";
-import { Data, Stock, Option, Crypto, Dividend, Fee } from "../../types";
+import { Data, Stock } from "../../types";
 
 /*
   fetchedData is Thinkorswim's data
@@ -25,18 +24,10 @@ export function dataTransform(fetchedData: any): Data {
     }
   });
 
-  /*
-    Adding ProfitOrLoss on Stocks, Options, and Crypto
-  */
   const stocksWithProfitOrLoss = stocksProfitLossCalculator(stocks);
 
   return {
     stocks: { 'all': stocksWithProfitOrLoss },
-    options: { 'all': [] },
-    crypto: { 'all': [] },
-    dividends: { 'all': [] },
-    marginInterest: { 'all': [] },
-    subscriptionFees: { 'all': []},
     timeSynced: fetchedData.timeSynced
   }
 }

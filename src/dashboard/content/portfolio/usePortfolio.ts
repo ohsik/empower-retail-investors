@@ -23,11 +23,11 @@ export function usePortfolio(): UsePortfolioReturn {
     const results = totalSumOfProfitOrLoss(dataWithTimeKey.all, tradingType);
     const totalPL = results?.totalPL;
     
-    if(totalPL) {
+    if(totalPL !== undefined && totalPL !== null) {
       return { [tradingType]: totalPL }
     }
   });
-  
+
   const totalsFromTradingTypesObj = Object.assign({}, ...totalPLsFromTradingTypes);
   
   const grandTotal = Object.values(totalsFromTradingTypesObj).reduce((total, item) => {

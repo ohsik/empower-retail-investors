@@ -124,11 +124,11 @@ export function dataTransform(fetchedData: any): Data {
 
   return {
     stocks: { 'all': stocksWithProfitOrLoss },
-    options: { 'all':  optionsWithProfitOrLoss},
-    crypto: { 'all':  cryptoWithProfitOrLoss},
-    dividends: { 'all':  dividends},
-    marginInterest: { 'all':  marginInterest},
-    subscriptionFees: { 'all':  subscriptionFees},
+    options: { 'all': optionsWithProfitOrLoss},
+    crypto: { 'all': cryptoWithProfitOrLoss },
+    dividends: { 'all': dividends },
+    marginInterest: { 'all': marginInterest },
+    subscriptionFees: { 'all': subscriptionFees },
     timeSynced: fetchedData.timeSynced
   }
 }

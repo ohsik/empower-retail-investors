@@ -1,1 +1,1 @@
-export { AllBroderages } from './all-brokerages';
+export { AllBrokerages } from './all-brokerages';

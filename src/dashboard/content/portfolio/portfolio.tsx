@@ -2,7 +2,7 @@ import React from 'react';
 
 import { AllData } from '../../../../lib/types';
 import { AllBrokeragesWarning } from '../components/all-brokerages-warning';
-import { AllBroderages } from './components/all-brokerages';
+import { AllBrokerages } from './components/all-brokerages';
 import { PortfolioSummary } from './components/portfolio-summary';
 import { createGraphData } from '../../../../lib/helpers/create-graph-data';
 import { Graph } from './components/graph';
@@ -25,7 +25,7 @@ export function Portfolio({ data }: PortfolioProps): JSX.Element {
       {isAllBrokeragesSelected && 
         <>
           <AllBrokeragesWarning />
-          <AllBroderages />
+          <AllBrokerages />
         </>
       }
 
@@ -36,9 +36,15 @@ export function Portfolio({ data }: PortfolioProps): JSX.Element {
 
           {
             selectedTimeDuration !== 'all' ? 
-              <div className="text-xl font-semibold my-1">
+              <div className="text-xl my-1">
                 {
                   Object.entries(graphData).map(([section, graphData]) => {
+                    if((graphData as any).length === 0) return (
+                      <div key={section} className='grid justify-center items-center h-[200px] text-xs'>
+                        🤷‍♀️ Sorry, no P/L trades yet to generate graphs.
+                      </div>
+                    );
+
                     return (
                       <Graph key={section} graphData={graphData as any} section={section} />
                     )
