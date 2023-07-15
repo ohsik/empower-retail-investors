@@ -17,10 +17,10 @@ async function getCurrentTab() {
 
 // Find current brokerage from the current URL
 function getCurrentBrokerage(currentUrl: string | null | undefined) {
-  const currentBrokage = (Object.keys(brokerageUrls) as Array<keyof typeof brokerageUrls>).find(
+  const currentBrokerage = (Object.keys(brokerageUrls) as Array<keyof typeof brokerageUrls>).find(
     (brokerage) => currentUrl?.includes(brokerageUrls[brokerage])
   );
-  return currentBrokage;
+  return currentBrokerage;
 }
 
 // Event listener for tab activation change

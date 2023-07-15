@@ -7,12 +7,12 @@ type UsePopupReturns = {
   syncData: () => void;
   viewReports: () => void;
   isSyncing: boolean;
-  currentBrokage: keyof typeof brokerageUrls | undefined;
+  currentBrokerage: keyof typeof brokerageUrls | undefined;
   isFetchDataExist: boolean;
   currentUrl: string | null;
   syncErrorMessage: string | null;
   timeSynced?: string;
-  isCurrentBrokageSupported: boolean;
+  isCurrentBrokerageSupported: boolean;
 };
 
 type FetchUserDataTypes = {
@@ -31,38 +31,38 @@ export function usePopup(): UsePopupReturns {
   const [timeSynced, settimeSynced] = useState<string>('')
   const [syncErrorMessage, setSyncErrorMessage] = useState(null)
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
-  const [currentBrokage, setCurrentBrokage] = useState<keyof typeof brokerageUrls | undefined>(undefined);
-  const [isCurrentBrokageSupported, setIsCurrentBrokageSupported] = useState<boolean>(false);
+  const [currentBrokerage, setCurrentBrokerage] = useState<keyof typeof brokerageUrls | undefined>(undefined);
+  const [isCurrentBrokerageSupported, setIsCurrentBrokerageSupported] = useState<boolean>(false);
 
   useEffect(() => {
     // Check if the fetchedData exists already
     chrome.storage.local.get((items) => {
       const allKeys = Object.keys(items);
-      const currentBrokageDataKey = localFetchedDataName(currentBrokage);
-      setIsFetchDataExist(allKeys.some((k) => k === currentBrokageDataKey))
+      const currentBrokerageDataKey = localFetchedDataName(currentBrokerage);
+      setIsFetchDataExist(allKeys.some((k) => k === currentBrokerageDataKey))
 
-      if(currentBrokage) {
-        settimeSynced(items[currentBrokageDataKey]?.timeSynced)
+      if(currentBrokerage) {
+        settimeSynced(items[currentBrokerageDataKey]?.timeSynced)
       }
     });
 
-    async function setCurrentBrokerage() {
-      const { currentUrl, currentBrokage, isCurrentBrokageSupported } = await getCurrentBrokerage();
+    async function setCurrentLocalBrokerage() {
+      const { currentUrl, currentBrokerage, isCurrentBrokerageSupported } = await getCurrentBrokerage();
       setCurrentUrl(currentUrl)
-      setCurrentBrokage(currentBrokage)
-      setIsCurrentBrokageSupported(isCurrentBrokageSupported)
+      setCurrentBrokerage(currentBrokerage)
+      setIsCurrentBrokerageSupported(isCurrentBrokerageSupported)
     }
 
-    setCurrentBrokerage();
-  }, [currentBrokage, currentUrl])
+    setCurrentLocalBrokerage();
+  }, [currentBrokerage, currentUrl])
 
   function syncData() {
     setIsSyncing(true)
 
     const fetchUserData: FetchUserDataTypes = {
       FETCH_USER_DATA: {
-        brokerage: currentBrokage as keyof typeof brokerageUrls,
-        url: brokerageUrls[currentBrokage as keyof typeof brokerageUrls],
+        brokerage: currentBrokerage as keyof typeof brokerageUrls,
+        url: brokerageUrls[currentBrokerage as keyof typeof brokerageUrls],
       }
     }
 
@@ -70,7 +70,7 @@ export function usePopup(): UsePopupReturns {
     
     port.onMessage.addListener((message)=>  {
       if(message && !message.error) {
-        settimeSynced(message[localFetchedDataName(currentBrokage)]?.timeSynced)
+        settimeSynced(message[localFetchedDataName(currentBrokerage)]?.timeSynced)
         setIsFetchDataExist(true)
         setIsSyncing(false)
       } else {
@@ -88,11 +88,11 @@ export function usePopup(): UsePopupReturns {
     syncData,
     viewReports,
     isSyncing,
-    currentBrokage,
+    currentBrokerage,
     isFetchDataExist,
     currentUrl,
     syncErrorMessage,
     timeSynced,
-    isCurrentBrokageSupported,
+    isCurrentBrokerageSupported,
   }
 }

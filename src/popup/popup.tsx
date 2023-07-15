@@ -10,12 +10,12 @@ export function Popup(): JSX.Element {
     syncData,
     viewReports,
     isSyncing,
-    currentBrokage,
+    currentBrokerage,
     isFetchDataExist,
     currentUrl,
     syncErrorMessage,
     timeSynced,
-    isCurrentBrokageSupported,
+    isCurrentBrokerageSupported,
   } = usePopup();
 
   return (
@@ -24,29 +24,29 @@ export function Popup(): JSX.Element {
         <span className='mr-2 text-2xl'>🚀</span> Empower Retail Investors
       </h1>
       <div className="text-base my-2">
-        {currentBrokage
-          ? `Sync your trading history data from ${brokerageNames[currentBrokage]}`
+        {currentBrokerage
+          ? `Sync your trading history data from ${brokerageNames[currentBrokerage]}`
           : <p>This extension is exclusively designed for <i>US stock exchange brokerage</i> websites.</p>
         }
       </div>
       
       <div className="my-3 grid grid-cols-2 gap-2">
-        <Button onClick={syncData} children={`Sync data`} loading={isSyncing} disabled={!currentBrokage || !isCurrentBrokageSupported} />
+        <Button onClick={syncData} children={`Sync data`} loading={isSyncing} disabled={!currentBrokerage || !isCurrentBrokerageSupported} />
         <Button onClick={viewReports} children={`View reports`} disabled={!isFetchDataExist || isSyncing} />
       </div>
 
       {/* Error messages */}
-      {(!currentBrokage || !isCurrentBrokageSupported) && 
+      {(!currentBrokerage || !isCurrentBrokerageSupported) && 
         <p className="text-xs italic my-1 break-all">
-          {currentBrokage && brokerageNames[currentBrokage]}({currentUrl}) <b>is not supported at the moment</b>
+          {currentBrokerage && brokerageNames[currentBrokerage]}({currentUrl}) <b>is not supported at the moment</b>
         </p>
       }
 
       {syncErrorMessage && 
-        <p className="text-xs italic my-1">{`${syncErrorMessage} Please login to ${currentBrokage} and try again.`}</p>
+        <p className="text-xs italic my-1">{`${syncErrorMessage} Please login to ${currentBrokerage} and try again.`}</p>
       }
 
-      {isCurrentBrokageSupported && currentBrokage && !syncErrorMessage && 
+      {isCurrentBrokerageSupported && currentBrokerage && !syncErrorMessage && 
         <p className="text-xs italic my-1">{timeSynced ? 'Last synced at ' + moment(timeSynced).format('MMM Do YYYY, hh:mm:ss A') : 'Click Sync data button to get your first report!'}</p>
       }
     </main>

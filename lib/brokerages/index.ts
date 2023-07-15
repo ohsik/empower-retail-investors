@@ -16,7 +16,7 @@ type BrokeragesUrls = {
     endpoints: {
       [key: string]: string;
     }
-    getUserData: (currentBrokage: Brokerages | undefined, authToken?: string) => Promise<any>; // TODO: update any
+    getUserData: (currentBrokerage: Brokerages | undefined, authToken?: string) => Promise<any>; // TODO: update any
     transformData: (fetchedData: any) => Data;
   }
 };

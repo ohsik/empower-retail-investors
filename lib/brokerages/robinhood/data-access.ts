@@ -40,8 +40,8 @@ async function fetchData(authToken: string, endpoint: string, allOrders: any[] =
   }
 }
 
-export async function getUserData(currentBrokage: Brokerages | undefined, authToken: string = '') {
-  if(!currentBrokage) {
+export async function getUserData(currentBrokerage: Brokerages | undefined, authToken: string = '') {
+  if(!currentBrokerage) {
     throw Error('No current brokerage')
   }
 
@@ -50,7 +50,7 @@ export async function getUserData(currentBrokage: Brokerages | undefined, authTo
   }
 
   const fetchedData = await Promise.all(
-    Object.entries(BROKERAGES_VARS[currentBrokage].endpoints).map(async ([key, value]) => {
+    Object.entries(BROKERAGES_VARS[currentBrokerage].endpoints).map(async ([key, value]) => {
       const data = await fetchData(authToken, value)
       return { [key]: data };
     })
@@ -90,7 +90,7 @@ export async function getUserData(currentBrokage: Brokerages | undefined, authTo
   const timeSynced = new Date();
 
   const allData = {
-    [localFetchedDataName(currentBrokage)]: {
+    [localFetchedDataName(currentBrokerage)]: {
       data: await getAndAssignSymbols(fetchedData),
       timeSynced: timeSynced.toISOString()
     }    
