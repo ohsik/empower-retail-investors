@@ -40,7 +40,7 @@ export function Portfolio({ data }: PortfolioProps): JSX.Element {
                 {
                   Object.entries(graphData).map(([section, graphData]) => {
                     if((graphData as any).length === 0) return (
-                      <div key={section} className='grid justify-center items-center h-[200px] text-xs border dark:border-zinc-700 rounded mb-4'>
+                      <div key={section} className='grid justify-center items-center h-[200px] text-xs border dark:border-zinc-700 rounded mb-8'>
                         🤷‍♀️ Sorry, no P/L trades yet to generate {section} graphs.
                       </div>
                     );
