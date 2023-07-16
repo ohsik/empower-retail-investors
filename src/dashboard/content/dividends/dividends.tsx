@@ -41,7 +41,7 @@ export function Dividends({ data }: DividendsProps): JSX.Element {
           } else {
             return (
               <div key={dataKey} id={dataKey} className='shadow-md mb-12 p-6 dark:shadow-neutral-800'>
-                <NoTrades />
+                <NoTrades dataKey={dataKey} />
               </div>
             )
           }
