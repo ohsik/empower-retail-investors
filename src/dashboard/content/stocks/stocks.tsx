@@ -25,7 +25,7 @@ export function Stocks({ data }: StocksProps): JSX.Element {
         Object.keys(dataToRender)?.map((dataKey) => {
           // dataKey: robinhood, fidelity, etc.
           
-          if(dataToRender[dataKey]) {
+          if(dataToRender[dataKey] && Object.keys(dataToRender[dataKey]).length !== 0) {
             return Object.keys(dataToRender[dataKey]).map((timeKey) => {
               // timeKey: all, 2021, 2021+06, etc.
               const key = dataKey+'+'+timeKey;
@@ -38,9 +38,7 @@ export function Stocks({ data }: StocksProps): JSX.Element {
                 </div>
               )
             });
-          } 
-          
-          if(!dataToRender[dataKey]) {
+          } else {
             return (
               <div key={dataKey} id={dataKey} className='shadow-md mb-12 p-6 dark:shadow-neutral-800'>
                 <NoTrades />

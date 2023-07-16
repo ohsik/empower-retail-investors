@@ -12,7 +12,7 @@ export function About({}: AboutProps): JSX.Element {
       <h1 className='text-2xl my-4'>Hi there 👋, thank you for being here.</h1>
       <p className='my-2'>Empower Retail Investors is a free portfolio reporting tool designed to provide useful tools and resources for retail investors. We are currently in beta and actively seeking feedback and contributions.</p>
 
-      <p>If you have any feedback or are interested in contributing to Empower Retail Investors, please send an email to o(at)goodnightjournal(dot)com. We appreciate your support and look forward to hearing from you!</p>
+      <p>If you have feature requests, any feedback or are interested in contributing to Empower Retail Investors, please send an email to o(at)goodnightjournal(dot)com. We appreciate your support and look forward to hearing from you!</p>
 
       <h2 className='text-xl my-4 font-bold'>Currently supported brokerage:</h2>
       <ul className='list-disc list-inside'>
@@ -34,7 +34,7 @@ export function About({}: AboutProps): JSX.Element {
         <li>D3</li>
       </ul>
 
-      <p className='my-8'><a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo for Empower Retail Investors</a> will be public eventually as we get more contributors.<br />(current team: 🤖 ChatGPT and 😼 I)
+      <p className='my-8'><a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo for Empower Retail Investors</a> will probably be public eventually as we get more contributors.<br />(current team: 🤖 ChatGPT and 😼 I)
       </p>
 
       <p>Current version: v 0.0.6</p>

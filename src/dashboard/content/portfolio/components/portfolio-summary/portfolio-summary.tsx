@@ -26,7 +26,7 @@ export function PortfolioSummary({ totalsFromTradingTypesObj, grandTotal, isAllB
             </p>
 
             <p className="text-xs opacity-50 italic normal-case mt-4">
-              (To view more details, you can either navigate to a specific trading type from the left menu or change the time duration selection on the top right.)
+              (To view more details, choose a trading type or modify the time duration selection.)
             </p>
           </div>
           <div className="p-8">
