@@ -22,7 +22,7 @@ export function Summary({ data, timeKey, dataKey }: SummaryProps): JSX.Element {
         <h2 className="text-xs capitalize mb-1">
           Data from
         </h2>
-        <p className="text-xl font-semibold my-1">
+        <p className="text-xl font-semibold my-1 text-primary">
           {/* 🏦 */}
           {dataKey}
         </p>

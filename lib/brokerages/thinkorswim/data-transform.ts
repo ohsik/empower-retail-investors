@@ -79,8 +79,8 @@ export function dataTransform(fetchedData: any): Data {
         const sideAndPositionEffect = getSideAndPositionEffect(leg.instruction);
         
         // data format we deal with: "symbol": "TLRY_011725C1.5",
-        const optionData = leg.instruction.symbol;
-        
+        const optionData = leg.instrument.symbol;
+
         // Extracting expiration date
         const expirationDateMatch = optionData.match(/_(\d{6})/);
         const expirationDate = expirationDateMatch && expirationDateMatch[1];
@@ -101,7 +101,7 @@ export function dataTransform(fetchedData: any): Data {
       });
 
       // Only add valid option trades
-      if(order.orderLegCollection[0].instrument.underlyingSymbol && legs.optionType && legs.side && legs.positionEffect && legs.strikePrice && legs.expirationDate) {
+      if(order.orderLegCollection[0].instrument.underlyingSymbol && legs[0].optionType && legs[0].side && legs[0].positionEffect && legs[0].strikePrice && legs[0].expirationDate) {
         options.push({
           id: order.orderId,
           symbol: order.orderLegCollection[0].instrument.underlyingSymbol,
@@ -109,7 +109,7 @@ export function dataTransform(fetchedData: any): Data {
           quantity: order.quantity,
           direction: getOrderDirection(order.orderLegCollection[0].instruction),
           fees: 0,
-          premium: order.price,
+          premium: order.price * 100,
           executionDate: order.closeTime,
           legs: legs,
           underlyingPrice: undefined,
