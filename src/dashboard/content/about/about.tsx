@@ -16,13 +16,13 @@ export function About({}: AboutProps): JSX.Element {
 
       <h2 className='text-xl my-4 font-bold'>Currently supported brokerage:</h2>
       <ul className='list-disc list-inside'>
-        <li>Robinhood</li>
-        <li>Thinkorswim <i>(Not supported yet)</i></li>
-        <li>E-Trade <i>(Not supported yet)</i></li>
-        <li>Interactive Brokers <i>(Not supported yet)</i></li>
-        <li>Webull <i>(Not supported yet)</i></li>
-        <li>Charles Schwab <i>(Not supported yet)</i></li>
-        <li>Fidelity <i>(Not supported yet)</i></li>
+        <li>Robinhood <i>(Fully supported)</i></li>
+        <li>Thinkorswim <i>(Stocks and Options are supported)</i></li>
+        <li>Charles Schwab <i>(Coming soon)</i></li>
+        <li>Webull <i>(Coming soon)</i></li>
+        <li>E-Trade <i>(Coming soon)</i></li>
+        <li>Interactive Brokers <i>(Coming soon)</i></li>
+        <li>Fidelity <i>(Coming soon)</i></li>
       </ul>
 
       <h2 className='text-xl my-4 font-bold'>Built with the following technologies:</h2>
@@ -42,7 +42,7 @@ export function About({}: AboutProps): JSX.Element {
       <h2 className='text-xl my-4 font-bold'>Upcoming:</h2>
       <ul className='list-disc list-inside'>
         <li>Better options calculation with options events</li>
-        <li>Bring more brokerages 🥵 (next up: Thinkorswim)</li>
+        <li>Bring more brokerages 🥵 (currently in progress: Thinkorswim)</li>
       </ul>
     </div>
   )

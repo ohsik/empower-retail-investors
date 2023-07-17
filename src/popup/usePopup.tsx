@@ -29,7 +29,7 @@ export function usePopup(): UsePopupReturns {
   const [isSyncing, setIsSyncing] = useState(false)
   const [isFetchDataExist, setIsFetchDataExist] = useState(false)
   const [timeSynced, settimeSynced] = useState<string>('')
-  const [syncErrorMessage, setSyncErrorMessage] = useState(null)
+  const [syncErrorMessage, setSyncErrorMessage] = useState<string | null>(null)
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
   const [currentBrokerage, setCurrentBrokerage] = useState<keyof typeof brokerageUrls | undefined>(undefined);
   const [isCurrentBrokerageSupported, setIsCurrentBrokerageSupported] = useState<boolean>(false);
@@ -58,6 +58,7 @@ export function usePopup(): UsePopupReturns {
 
   function syncData() {
     setIsSyncing(true)
+    let messageHasReturned = false;
 
     const fetchUserData: FetchUserDataTypes = {
       FETCH_USER_DATA: {
@@ -69,6 +70,9 @@ export function usePopup(): UsePopupReturns {
     port.postMessage(fetchUserData);
     
     port.onMessage.addListener((message)=>  {
+      messageHasReturned = true;
+      clearTimeout(timeout);
+
       if(message && !message.error) {
         settimeSynced(message[localFetchedDataName(currentBrokerage)]?.timeSynced)
         setIsFetchDataExist(true)
@@ -78,6 +82,14 @@ export function usePopup(): UsePopupReturns {
         setIsSyncing(false)
       }
     })
+
+    // show error if it takes over 1 minute
+    const timeout = setTimeout(() => {
+      if (!messageHasReturned) {
+        setSyncErrorMessage(`Timeout error. Something went wrong`);
+        setIsSyncing(false);
+      }
+    }, 60000);
   }
 
   function viewReports() {
