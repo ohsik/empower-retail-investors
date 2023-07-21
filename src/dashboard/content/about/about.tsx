@@ -1,12 +1,6 @@
 import React from 'react';
 
-import { Summary } from "../components/summary";
-import { Table } from "../stocks/table";
-
-type AboutProps = {
-};
-
-export function About({}: AboutProps): JSX.Element {
+export function About(): JSX.Element {
   return (
     <div className='text-l max-w-xl'>
       <h1 className='text-2xl my-4'>Hi there 👋, thank you for being here.</h1>
@@ -37,7 +31,7 @@ export function About({}: AboutProps): JSX.Element {
       <p className='my-8'><a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo for Empower Retail Investors</a> will probably be public eventually as we get more contributors.<br />(current team: 🤖 ChatGPT and 😼 I)
       </p>
 
-      <p>Current version: v 0.0.6</p>
+      <p>Current version: v0.0.7</p>
 
       <h2 className='text-xl my-4 font-bold'>Upcoming:</h2>
       <ul className='list-disc list-inside'>

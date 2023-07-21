@@ -164,7 +164,7 @@ export function LineGraph({ graphData, reversedGraphData, section, durationSelec
         const rangePoints = d3.range(range[0], range[1], xScale.step())
         const yPos = domain[d3.bisect(rangePoints, xPos)]
 
-        return X.indexOf(yPos)
+        return X.indexOf(yPos) < 0 ? 0 : X.indexOf(yPos)
       }
 
       const i = scalePointPosition()
@@ -176,19 +176,18 @@ export function LineGraph({ graphData, reversedGraphData, section, durationSelec
       // .style('left', `${xScale(X[i])}px`) // TODO: try using graph specific x and y position
       // .style('top', `${yScale(Y[i])}px`)
 
-      
       const dateRangeText = durationSelected === 'weekly' ? `${formatDate(splitWeeklyDateRange(X[i])[0])} to ${formatDate(splitWeeklyDateRange(X[i])[1])}` : `${formatDate(X[i])}`
 
       tooltip.selectAll('div')
       .data([graphData[i]])
       .join('div')
       .html(function(d) {
-        return `<div class="font-sans font-normal text-white antialiased text-base p-4 py-2 rounded" style="font-size: 14px; background: ${Y[i] < 0 || section === 'Fees' ? '#ef4444' : '#22c55d'}">${Y[i] ? `${dateRangeText}<br/><span class="font-bold">P/L: ${toUSD(Y[i])}</span>` : "No P/L data to generate graph"}</div>`;
+        return `<div class="font-sans font-normal text-white antialiased text-base p-4 py-2 rounded" style="font-size: 14px; background: ${Y[i] < 0 || section === 'Fees' ? '#ef4444' : '#22c55d'}">${Y[i] ? `${dateRangeText}<br/><span class="font-bold">P/L: ${toUSD(Y[i])}</span>` : "Not enough P/L data to generate graph"}</div>`;
       });
     
       
       xHoverLine.style('display', null)
-      xHoverLine.attr('transform', `translate(${xScale(X[i])}, ${16})`)
+      xHoverLine.attr('transform', `translate(${xScale(X[i]) ?? 0}, ${16})`)
     }
 
     function pointerleft() {

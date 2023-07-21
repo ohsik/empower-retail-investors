@@ -69,7 +69,7 @@ export function dataTransform(fetchedData: any): Data {
         price: order.price,
         quantity: order.quantity,
         fees: 0,
-        side: order.orderLegCollection[0].instruction,
+        side: order.orderLegCollection[0].instruction.toLowerCase(),
         executionDate: order.closeTime,
       })
 
@@ -119,7 +119,7 @@ export function dataTransform(fetchedData: any): Data {
     }
   });
 
-  const stocksWithProfitOrLoss = stocksProfitLossCalculator(stocks);
+  const stocksWithProfitOrLoss = stocksProfitLossCalculator(stocks);  
   const optionsWithProfitOrLoss = optionsProfitLossCalculator(options);
 
   return {
