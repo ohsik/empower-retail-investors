@@ -3,6 +3,7 @@ export interface Crypto {
   symbol: string;
   price: number;
   quantity: number;
+  amount: number; // price * quantity
   fees: number;
   side: 'buy' | 'sell';
   executionDate: string;

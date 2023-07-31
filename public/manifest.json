@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "name": "Empower retail investors",
   "description": "Empowering retail investors by providing the right tools to enable their participation and success in financial markets.",
 	"permissions": ["webRequest", "storage", "unlimitedStorage", "tabs"],
@@ -10,7 +10,7 @@
   },
 	"content_scripts": [
 		{
-			"matches": ["https://*.robinhood.com/*", "https://*.webull.com/*", "https://*.thinkorswim.com/*", "https://*.tdameritrade.com/*"],
+			"matches": ["https://*.robinhood.com/*", "https://*.webull.com/*", "https://*.thinkorswim.com/*", "https://*.tdameritrade.com/*", "https://chat.openai.com/*", "https://claude.ai/*", "https://bard.google.com/*"],
 			"js": ["./static/js/content.js"]
 		}
 	],

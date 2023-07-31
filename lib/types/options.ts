@@ -3,6 +3,7 @@ export interface Option {
   symbol: string;
   price: number;
   quantity: number;
+  amount: number; // price * (quantity * 100)
   direction: 'debit' | 'credit';
   fees: number;
   premium: number;

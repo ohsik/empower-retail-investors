@@ -132,7 +132,8 @@ export function optionsProfitLossCalculator(orders: Option[]): OptionsWithPLType
     })
 
     // When profit or loss occured mark them on the trade on profitOrLoss
-    results = [{ ...order, profitOrLoss }, ...results]
+    const profitOrLossWithFee = profitOrLoss - order.fees;
+    results = [{ ...order, profitOrLoss: profitOrLossWithFee }, ...results]
   })
 
   return results

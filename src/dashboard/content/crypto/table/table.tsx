@@ -26,6 +26,7 @@ export function Table({ data }: TableProps): JSX.Element {
               <th className="p-4 py-2">Symbol</th>
               <th className="p-4 py-2">Price</th>
               <th className="p-4 py-2">Quantity</th>
+              <th className="p-4 py-2">Amount</th>
               <th className="p-4 py-2">Side</th>
               <th className="p-4 py-2">Fees</th>
               <th className="p-4 py-2">Profit/Loss</th>
@@ -39,6 +40,7 @@ export function Table({ data }: TableProps): JSX.Element {
                   <td className="px-4 py-5"><b>{trade.symbol}</b></td>
                   <td className="px-4 py-5">{toUSD(trade.price)}</td>
                   <td className="px-4 py-5">{Number(trade.quantity).toFixed(8)}</td>
+                  <td className="px-4 py-5">{toUSD(trade.amount)}</td>
                   <td className="px-4 py-5">{trade.side}</td>
                   <td className="px-4 py-5">{toUSD(trade.fees)}</td>
                   <td className={`px-4 py-5 font-bold`}>

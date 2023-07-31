@@ -60,6 +60,17 @@ export function dataTransform(fetchedData: any): Data {
   let stocks: Stock[] = [];
   let options: Option[] = [];
 
+  let transactionFeeDictionary: Record<string, number> = {}
+
+  // Get transaction fees
+  fetchedData.data?.transactions?.forEach((transaction: any) => {
+    if(transaction.type === 'TRADE') {
+      const transectionFee = Object.values(transaction.fees).reduce((acc: number, fee: any) => acc + fee, 0);
+      const orderId = transaction.orderId;
+      transactionFeeDictionary[orderId] = transectionFee;
+    }
+  });
+
   fetchedData.data.orders.forEach((order: any) => {
     if(order.orderLegCollection[0].orderLegType === 'EQUITY') {
 
@@ -68,7 +79,8 @@ export function dataTransform(fetchedData: any): Data {
         symbol: order.orderLegCollection[0].instrument.symbol,
         price: order.price,
         quantity: order.quantity,
-        fees: 0,
+        amount: order.price * order.quantity,
+        fees: transactionFeeDictionary[order.orderId],
         side: order.orderLegCollection[0].instruction.toLowerCase(),
         executionDate: order.closeTime,
       })
@@ -107,8 +119,9 @@ export function dataTransform(fetchedData: any): Data {
           symbol: order.orderLegCollection[0].instrument.underlyingSymbol,
           price: order.price,
           quantity: order.quantity,
+          amount: order.price * (order.quantity * 100),
           direction: getOrderDirection(order.orderLegCollection[0].instruction),
-          fees: 0,
+          fees: transactionFeeDictionary[order.orderId],
           premium: order.price * 100,
           executionDate: order.closeTime,
           legs: legs,

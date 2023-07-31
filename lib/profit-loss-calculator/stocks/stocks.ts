@@ -79,7 +79,8 @@ export function stocksProfitLossCalculator(stocks: Stock[]): Stock[] {
     profitOrLoss = holdings[stockSymbol].profitOrLoss
 
     // When profit or loss occured mark them on the trade on profitOrLoss
-    results = [{ ...order, profitOrLoss }, ...results]
+    const profitOrLossWithFee = profitOrLoss - order.fees;
+    results = [{ ...order, profitOrLoss: profitOrLossWithFee }, ...results]
   });
 
 

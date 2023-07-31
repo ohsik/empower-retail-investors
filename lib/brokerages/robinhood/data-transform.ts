@@ -21,11 +21,14 @@ export function dataTransform(fetchedData: any): Data {
   const stocks: Stock[] = fetchedData.data.orders.results
   .filter((stock: any) => INCLUDE_DATA.includes(stock.state))
   .map((stock: any) => {
+    const price = convertStringToNumber(stock.average_price ?? stock.price);
+    const quantity = convertStringToNumber(stock.quantity);
     return { 
       id: stock.id,
       symbol: stock.symbol ?? stock.instrument,
-      price: convertStringToNumber(stock.average_price ?? stock.price),
-      quantity: convertStringToNumber(stock.quantity),
+      price: price,
+      quantity: quantity,
+      amount: price * quantity,
       fees: stock.fees,
       side: stock.side,
       executionDate: stock.updated_at,
@@ -49,11 +52,14 @@ export function dataTransform(fetchedData: any): Data {
       };
     });
 
+    const price = convertStringToNumber(option.price);
+    const quantity = convertStringToNumber(option.quantity);
     return { 
       id: option.id,
       symbol: option.chain_symbol,
-      price: convertStringToNumber(option.price),
-      quantity: convertStringToNumber(option.quantity),
+      price: price,
+      quantity: quantity,
+      amount: price * (quantity * 100),
       direction: option.direction,
       fees: 0,
       premium: convertStringToNumber(option.premium),
@@ -69,12 +75,15 @@ export function dataTransform(fetchedData: any): Data {
   .filter((stock: any) => INCLUDE_DATA.includes(stock.state))
   .map((crypto: any) => {
     const symbol = fetchedData.data.crypto_currency_pair.results.find((currency: any) => currency.id === crypto.currency_pair_id);
+    const price = convertStringToNumber(crypto.average_price);
+    const quantity = convertStringToNumber(crypto.quantity);
 
     return {
       id: crypto.id,
       symbol: symbol.symbol ?? crypto.currency_pair_id,
-      price: convertStringToNumber(crypto.average_price),
-      quantity: convertStringToNumber(crypto.quantity),
+      price: price,
+      quantity: quantity,
+      amount: price * quantity,
       fees: 0,
       side: crypto.side,
       executionDate: crypto.last_transaction_at
