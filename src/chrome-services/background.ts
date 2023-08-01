@@ -81,21 +81,25 @@ chrome.webRequest.onBeforeSendHeaders.addListener(getAuthToken,
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (message)=>  {
     if(message.FETCH_USER_DATA) {
+
+      // because currentBrokerage is unstable, use message.FETCH_USER_DATA.brokerage as fallback
+      const currentBrokerageWithFallback = currentBrokerage || message.FETCH_USER_DATA.brokerage;
+
       const authToken = await new Promise<string>((resolve) => {
-        chrome.storage.local.get(localAuthTokenName(currentBrokerage), ({ [localAuthTokenName(currentBrokerage)]: authToken }) => {
+        chrome.storage.local.get(localAuthTokenName(currentBrokerageWithFallback), ({ [localAuthTokenName(currentBrokerageWithFallback)]: authToken }) => {
           resolve(authToken);
         });
       });
 
-      if(!authToken) {
+      if(!authToken || !currentBrokerageWithFallback) {
         const error = {
-          error: `${currentBrokerage} authToken is missing.`
+          error: `${currentBrokerageWithFallback} brokerage or authToken is missing.`
         }
         port.postMessage(error);
       }
 
       // Make sure to define function name to "getUserData" in lib/brokerages/<BROKERAGE>/data-access.ts
-      const reponse = currentBrokerage && await BROKERAGES_VARS[currentBrokerage]?.getUserData(currentBrokerage, authToken);
+      const reponse = currentBrokerageWithFallback && await BROKERAGES_VARS[currentBrokerageWithFallback]?.getUserData(currentBrokerageWithFallback, authToken);
 
       if(reponse) {
         port.postMessage(reponse);

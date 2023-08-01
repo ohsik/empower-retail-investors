@@ -95,11 +95,17 @@ export function dataTransform(fetchedData: any): Data {
 
         // Extracting expiration date
         const expirationDateMatch = optionData.match(/_(\d{6})/);
-        const expirationDate = expirationDateMatch && expirationDateMatch[1];
+        const expirationDateRaw = expirationDateMatch && expirationDateMatch[1];
+        const expirationDate = /^\d{6}$/.test(expirationDateRaw) ? `${expirationDateRaw.slice(0, 2)}/${expirationDateRaw.slice(2, 4)}/${expirationDateRaw.slice(4)}` : expirationDateRaw;
         
         // Extracting strike price
-        const strikePriceMatch = optionData.match(/(\d+(?:\.\d+)?)/);
-        const strikePrice = strikePriceMatch && parseFloat(strikePriceMatch[1]);
+        function extractStrikePrice(optionString: string): string | null {
+          const regex = /_[0-9]{6}(?:C|P)?(\d|\.\d)?/;
+          const match = optionString.match(regex);
+          return match ? match[1] : null;
+        }
+        
+        const strikePrice = extractStrikePrice(optionData);
 
         return {
           optionType: leg.instrument.putCall.toLowerCase() === 'call' ? 'call' : 'put',

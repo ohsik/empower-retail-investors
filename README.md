@@ -1,4 +1,4 @@
-![version](https://img.shields.io/badge/version-0.0.8-green.svg)
+![version](https://img.shields.io/badge/version-0.0.9-green.svg)
 
 # 🚀 Empower retail investors
 Empowering retail investors by providing them with the right tools is crucial for enabling their participation and success in financial markets.
