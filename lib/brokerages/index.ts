@@ -10,6 +10,7 @@ import {
 
 import { 
   GET_ACCOUNT_NUMBER as thinkorswim_getAuthTokenUrls,
+  GET_ACCESS_TOKEN as thinkorswim_getAccessToken,
   ENDPOINTS as thinkorswim_endpoints,
   getUserData as thinkorswim_getUserData ,
   dataTransform as thinkorswim_dataTransform,
@@ -34,6 +35,7 @@ export const BROKERAGES_VARS: BROKERAGES_VARS_TYPE = {
   },
   [Brokerages.Thinkorswim]: {
     getAccountNumber: thinkorswim_getAuthTokenUrls,
+    getAccessToken: thinkorswim_getAccessToken,
     endpoints: thinkorswim_endpoints,
     getUserData: thinkorswim_getUserData,
     transformData: thinkorswim_dataTransform,

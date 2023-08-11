@@ -8,6 +8,7 @@ const formattedDate = currentDate.toLocaleString('en-US', { year: 'numeric', mon
 const API_URL = 'https://api.tdameritrade.com/v1';
 
 export const GET_ACCOUNT_NUMBER = `${API_URL}/accounts`;
+export const GET_ACCESS_TOKEN = `${API_URL}/oauth2/token`;
 /*
   TD Ameritrade API:
   https://developer.tdameritrade.com/apis

@@ -1,4 +1,4 @@
-import { localAuthTokenName } from "../../lib/consts/local-storage-var";
+import { localAuthTokenName, localRefreshTokenName } from "../../lib/consts/local-storage-var";
 import { getCurrentBrokerageFromURL } from "../../lib/helpers/get-current-brokerage-from-url";
 
 const currentUrl = window.location.href;
@@ -11,9 +11,14 @@ const currentBrokerage = getCurrentBrokerageFromURL(currentUrl);
 */
 if(currentBrokerage === 'thinkorswim') {
   const authToken = sessionStorage.getItem('authToken');
+  const refreshToken = sessionStorage.getItem('refreshToken');
 
   if(authToken) {
     chrome.storage.local.set({ [localAuthTokenName(currentBrokerage)]: `Bearer ${authToken}` })
+  }
+
+  if(refreshToken) {  
+    chrome.storage.local.set({ [localRefreshTokenName(currentBrokerage)]: `${refreshToken}` })
   }
 }
 

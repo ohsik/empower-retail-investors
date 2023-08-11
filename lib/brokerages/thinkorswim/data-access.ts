@@ -1,6 +1,6 @@
 import { BROKERAGES_VARS } from "..";
 import { Brokerages } from "../../consts/brokerages";
-import { localFetchedDataName } from "../../consts/local-storage-var";
+import { localFetchedDataName, localRefreshTokenName } from "../../consts/local-storage-var";
 import { requestHeaders } from "../../helpers/request-headers";
 
 
@@ -26,6 +26,36 @@ function findAccountNumber(obj: any): string | undefined {
   return undefined;
 }
 
+// Get new access token cause auth token expires in 30 mins
+// https://developer.tdameritrade.com/authentication/apis/post/token-0
+async function getNewAccessToken(): Promise<string | undefined> {
+  const url = BROKERAGES_VARS[Brokerages.Thinkorswim].getAccessToken;
+
+  const refreshToken = await new Promise<string>((resolve) => {
+    chrome.storage.local.get(localRefreshTokenName(Brokerages.Thinkorswim), ({ [localRefreshTokenName(Brokerages.Thinkorswim)]: refreshToken }) => {
+      resolve(refreshToken);
+    });
+  });
+
+  const params = new URLSearchParams();
+  params.append('grant_type', 'refresh_token');
+  params.append('refresh_token', refreshToken);
+  params.append('client_id', 'TDATRADERX@AMER.OAUTHAP');
+
+  const options = {
+    method: 'POST',
+    body: params,
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return `${data.token_type} ${data.access_token}`
+  } catch (error) {
+    console.error('Error fetching getNewAccessToken:', error);
+  }
+}
+
 async function fetchData(authToken: string, endpoint: string): Promise<void> {
   try {
     const reponse = await fetch(endpoint, {
@@ -33,11 +63,18 @@ async function fetchData(authToken: string, endpoint: string): Promise<void> {
       headers: requestHeaders(authToken)
     })
 
-    // TODO: consider error handling here for the fetch
-    // if(!reponse.ok) { 
-    //   do something...
-    //   reponse.status === '401' && 'UnAuthrized reqeust, plz login'
-    // }
+    if(!reponse.ok) {
+      // when authToken does not work, we want to get a new accessToken with the refreshToken
+      // authToken expires in 30 mins
+      // refreshToken expires in 90 days
+      // Make users re-login after 90 days
+      if(reponse.status === 401) {
+        const newAccessToken = await getNewAccessToken();
+        newAccessToken ? fetchData(newAccessToken, endpoint) : console.log('Error: getNewAccessToken fetched but returned undefied');
+      } else {
+        console.log('Error fetchData: ', reponse)
+      }
+    }
 
     const data = await reponse.json()
     return data

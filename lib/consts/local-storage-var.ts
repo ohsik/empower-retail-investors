@@ -11,3 +11,7 @@ export function localFetchedDataName(currentBrokerage: Brokerages | undefined): 
 export function localAuthTokenName(currentBrokerage: Brokerages | undefined): string {
   return `authToken-${currentBrokerage}`
 }
+
+export function localRefreshTokenName(currentBrokerage: Brokerages | undefined): string {
+  return `refreshToken-${currentBrokerage}`
+}
