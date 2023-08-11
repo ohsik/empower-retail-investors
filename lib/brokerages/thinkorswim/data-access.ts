@@ -53,44 +53,50 @@ async function getNewAccessToken(): Promise<string | undefined> {
     return `${data.token_type} ${data.access_token}`
   } catch (error) {
     console.error('Error fetching getNewAccessToken:', error);
+    throw error;
   }
 }
 
 async function fetchData(authToken: string, endpoint: string): Promise<void> {
   try {
-    const reponse = await fetch(endpoint, {
+    const response = await fetch(endpoint, {
       method: 'GET',
       headers: requestHeaders(authToken)
     })
 
-    if(!reponse.ok) {
+    if(!response.ok) {
       // when authToken does not work, we want to get a new accessToken with the refreshToken
       // authToken expires in 30 mins
       // refreshToken expires in 90 days
       // Make users re-login after 90 days
-      if(reponse.status === 401) {
+      if(response.status === 401) {
         const newAccessToken = await getNewAccessToken();
-        newAccessToken ? fetchData(newAccessToken, endpoint) : console.log('Error: getNewAccessToken fetched but returned undefied');
+        if (newAccessToken) {
+          await fetchData(newAccessToken, endpoint);
+        } else {
+          throw new Error('Error: getNewAccessToken fetched but returned undefined');
+        }
       } else {
-        console.log('Error fetchData: ', reponse)
+        throw new Error(`Error fetching data from '${endpoint}': ${response.statusText}`);
       }
     }
 
-    const data = await reponse.json()
+    const data = await response.json()
     return data
 
   } catch (error) {
-    console.log(error)
+    console.error('Error in fetchData:', error);
+    throw error;
   }
 }
 
 export async function getUserData(currentBrokerage: Brokerages | undefined, authToken: string = '') {
   if(!currentBrokerage) {
-    throw Error('No current brokerage')
+    throw new Error('No current brokerage')
   }
 
   if(!authToken) {
-    throw Error('Thinkorswim authToken is missing.')
+    throw new Error('Thinkorswim authToken is missing.')
   }
 
   const accountNumberObj = await fetchData(authToken, BROKERAGES_VARS[currentBrokerage].getAccountNumber)

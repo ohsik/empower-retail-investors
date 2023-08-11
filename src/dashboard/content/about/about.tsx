@@ -11,7 +11,7 @@ export function About(): JSX.Element {
       <h2 className='text-xl my-4 font-bold'>Currently supported brokerage:</h2>
       <ul className='list-disc list-inside'>
         <li>Robinhood <i>(Fully supported)</i></li>
-        <li>Thinkorswim <i>(Stocks and Options are supported)</i></li>
+        <li>Thinkorswim <i>(Stocks, Options, and Dividend are supported)</i></li>
         <li>Charles Schwab <i>(Coming soon)</i></li>
         <li>Webull <i>(Coming soon)</i></li>
         <li>E-Trade <i>(Coming soon)</i></li>
