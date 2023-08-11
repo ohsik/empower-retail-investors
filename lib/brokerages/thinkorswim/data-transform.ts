@@ -1,7 +1,7 @@
 
 import { optionsProfitLossCalculator } from "../../profit-loss-calculator/options";
 import { stocksProfitLossCalculator } from "../../profit-loss-calculator/stocks";
-import { Data, Leg, Option, Stock } from "../../types";
+import { Data, Dividend, Leg, Option, Stock } from "../../types";
 
 /*
   fetchedData is Thinkorswim's data
@@ -59,6 +59,7 @@ export function dataTransform(fetchedData: any): Data {
 
   let stocks: Stock[] = [];
   let options: Option[] = [];
+  let dividends: Dividend[] = [];
 
   let transactionFeeDictionary: Record<string, number> = {}
 
@@ -73,19 +74,20 @@ export function dataTransform(fetchedData: any): Data {
 
   fetchedData.data.orders.forEach((order: any) => {
     if(order.orderLegCollection[0].orderLegType === 'EQUITY') {
+      const orderPrice = order.price ?? order.orderActivityCollection[0].executionLegs[0].price; // TODO: re-visit this order.orderActivityCollection[0].executionLegs[0].price
 
       stocks.push({
         id: order.orderId,
         symbol: order.orderLegCollection[0].instrument.symbol,
-        price: order.price,
+        price: orderPrice,
         quantity: order.quantity,
-        amount: order.price * order.quantity,
+        amount: orderPrice * order.quantity,
         fees: transactionFeeDictionary[order.orderId],
         side: order.orderLegCollection[0].instruction.toLowerCase(),
         executionDate: order.closeTime,
       })
 
-    } else if(order.orderLegCollection[0].orderLegType === 'OPTION') {
+    } else if (order.orderLegCollection[0].orderLegType === 'OPTION') {
 
       const legs = order.orderLegCollection.map((leg: any) => {
         const sideAndPositionEffect = getSideAndPositionEffect(leg.instruction);
@@ -120,21 +122,32 @@ export function dataTransform(fetchedData: any): Data {
 
       // Only add valid option trades
       if(order.orderLegCollection[0].instrument.underlyingSymbol && legs[0].optionType && legs[0].side && legs[0].positionEffect && legs[0].strikePrice && legs[0].expirationDate) {
+        const orderPrice = order.price ?? order.orderActivityCollection[0].executionLegs[0].price; // TODO: re-visit this order.orderActivityCollection[0].executionLegs[0].price
+
         options.push({
           id: order.orderId,
           symbol: order.orderLegCollection[0].instrument.underlyingSymbol,
-          price: order.price,
+          price: orderPrice,
           quantity: order.quantity,
-          amount: order.price * (order.quantity * 100),
+          amount: orderPrice * (order.quantity * 100),
           direction: getOrderDirection(order.orderLegCollection[0].instruction),
           fees: transactionFeeDictionary[order.orderId],
-          premium: order.price * 100,
+          premium: orderPrice * 100,
           executionDate: order.closeTime,
           legs: legs,
           underlyingPrice: undefined,
         })
       }
 
+    } else if (order.orderLegCollection[0].orderLegType === 'DIVIDEND_OR_INTEREST') {
+      
+      dividends.push({
+        id: order.orderId,
+        symbol: order.transactionItem.instrument.symbol + ' ' + order.description,
+        amount: order.netAmount ?? order.transactionItem.amount,
+        executionDate: order.orderDate,
+      })
+      
     }
   });
 
@@ -144,6 +157,7 @@ export function dataTransform(fetchedData: any): Data {
   return {
     stocks: { 'all': stocksWithProfitOrLoss },
     options: { 'all': optionsWithProfitOrLoss },
+    dividends: { 'all': dividends },
     timeSynced: fetchedData.timeSynced
   }
 }
