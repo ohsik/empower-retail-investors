@@ -25,16 +25,17 @@ function findAccountNumber(obj: any): string | undefined {
   }
   return undefined;
 }
+const MAX_GET_ACCESS_TOKEN_RETRIES = 3;
 
-// Get new access token cause auth token expires in 30 mins
-// https://developer.tdameritrade.com/authentication/apis/post/token-0
 async function getNewAccessToken(): Promise<string | undefined> {
   const url = BROKERAGES_VARS[Brokerages.Thinkorswim].getAccessToken;
-
   const refreshToken = await new Promise<string>((resolve) => {
-    chrome.storage.local.get(localRefreshTokenName(Brokerages.Thinkorswim), ({ [localRefreshTokenName(Brokerages.Thinkorswim)]: refreshToken }) => {
-      resolve(refreshToken);
-    });
+    chrome.storage.local.get(
+      localRefreshTokenName(Brokerages.Thinkorswim),
+      ({ [localRefreshTokenName(Brokerages.Thinkorswim)]: refreshToken }) => {
+        resolve(refreshToken);
+      }
+    );
   });
 
   const params = new URLSearchParams();
@@ -42,22 +43,28 @@ async function getNewAccessToken(): Promise<string | undefined> {
   params.append('refresh_token', refreshToken);
   params.append('client_id', 'TDATRADERX@AMER.OAUTHAP');
 
-  const options = {
-    method: 'POST',
-    body: params,
-  };
+  for (let retry = 0; retry < MAX_GET_ACCESS_TOKEN_RETRIES; retry++) {
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: params,
+      });
 
-  try {
-    const response = await fetch(url, options);
-    const data = await response.json();
-    return `${data.token_type} ${data.access_token}`
-  } catch (error) {
-    console.error('Error fetching getNewAccessToken:', error);
-    throw error;
+      if (!response.ok) {
+        throw new Error(`Error Re-fetching ${retry} getNewAccessToken: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return `${data.token_type} ${data.access_token}`;
+    } catch (error) {
+      console.error('Error fetching getNewAccessToken:', error);
+    }
   }
+
+  throw new Error(`Failed to get access token after ${MAX_GET_ACCESS_TOKEN_RETRIES} retries`);
 }
 
-async function fetchData(authToken: string, endpoint: string): Promise<void> {
+async function fetchData(authToken: string, endpoint: string): Promise<void | any> {
   try {
     const response = await fetch(endpoint, {
       method: 'GET',
@@ -86,7 +93,9 @@ async function fetchData(authToken: string, endpoint: string): Promise<void> {
 
   } catch (error) {
     console.error('Error in fetchData:', error);
-    throw error;
+    return {
+      error: (error as Error).message
+    }
   }
 }
 
@@ -100,6 +109,7 @@ export async function getUserData(currentBrokerage: Brokerages | undefined, auth
   }
 
   const accountNumberObj = await fetchData(authToken, BROKERAGES_VARS[currentBrokerage].getAccountNumber)
+
   const accountNumber = findAccountNumber(accountNumberObj);
 
   if (accountNumber) {

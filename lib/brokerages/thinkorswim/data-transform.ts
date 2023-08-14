@@ -9,7 +9,7 @@ import { Data, Dividend, Leg, Option, Stock } from "../../types";
 */
 
 function getOrderDirection(instruction: string): Option["direction"] {
-  const debitOrders = ["BUY", "BUY_TO_COVER", "BUY_TO_CLOSE"];
+  const debitOrders = ["BUY", "BUY_TO_COVER", "BUY_TO_CLOSE", "BUY_TO_OPEN"];
   return debitOrders.includes(instruction) ? 'debit' : 'credit';
 }
 
