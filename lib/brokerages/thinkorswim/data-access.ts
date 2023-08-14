@@ -25,6 +25,7 @@ function findAccountNumber(obj: any): string | undefined {
   }
   return undefined;
 }
+
 const MAX_GET_ACCESS_TOKEN_RETRIES = 3;
 
 async function getNewAccessToken(): Promise<string | undefined> {
@@ -64,22 +65,18 @@ async function getNewAccessToken(): Promise<string | undefined> {
   throw new Error(`Failed to get access token after ${MAX_GET_ACCESS_TOKEN_RETRIES} retries`);
 }
 
-async function fetchData(authToken: string, endpoint: string): Promise<void | any> {
+async function fetchData(authToken: string, endpoint: string, retryCount: number = 0): Promise<any> {
   try {
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: requestHeaders(authToken)
-    })
+    });
 
-    if(!response.ok) {
-      // when authToken does not work, we want to get a new accessToken with the refreshToken
-      // authToken expires in 30 mins
-      // refreshToken expires in 90 days
-      // Make users re-login after 90 days
-      if(response.status === 401) {
+    if (!response.ok) {
+      if (response.status === 401 && retryCount < MAX_GET_ACCESS_TOKEN_RETRIES) {
         const newAccessToken = await getNewAccessToken();
         if (newAccessToken) {
-          await fetchData(newAccessToken, endpoint);
+          return await fetchData(newAccessToken, endpoint, retryCount + 1);
         } else {
           throw new Error('Error: getNewAccessToken fetched but returned undefined');
         }
@@ -88,14 +85,30 @@ async function fetchData(authToken: string, endpoint: string): Promise<void | an
       }
     }
 
-    const data = await response.json()
-    return data
+    const data = await response.json();
+
+    if (data && data.error) {
+      console.error('Error in fetchData at data.error:', data.error);
+      
+      if (retryCount < MAX_GET_ACCESS_TOKEN_RETRIES) {
+        const newAccessToken = await getNewAccessToken();
+        if (newAccessToken) {
+          return await fetchData(newAccessToken, endpoint, retryCount + 1);
+        } else {
+          throw new Error('Error: getNewAccessToken fetched but returned undefined');
+        }
+      } else {
+        throw new Error('Error: Max retries reached while fetching data.');
+      }
+    }
+
+    return data;
 
   } catch (error) {
     console.error('Error in fetchData:', error);
     return {
-      error: (error as Error).message
-    }
+      error: error instanceof Error ? error.message : 'An error occurred in fetchData.'
+    };
   }
 }
 
@@ -109,9 +122,8 @@ export async function getUserData(currentBrokerage: Brokerages | undefined, auth
   }
 
   const accountNumberObj = await fetchData(authToken, BROKERAGES_VARS[currentBrokerage].getAccountNumber)
-
   const accountNumber = findAccountNumber(accountNumberObj);
-
+  
   if (accountNumber) {
     // TODO: cause I have function | object for the enpoint type. Maybe there's a better solution.
     const getEndpoints = BROKERAGES_VARS[currentBrokerage].endpoints;
