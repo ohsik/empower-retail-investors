@@ -98,7 +98,6 @@ export function dataTransform(fetchedData: any): Data {
       id: dividend.id,
       symbol: dividend.symbol ?? dividend.instrument,
       amount: convertStringToNumber(dividend.amount),
-      position: dividend.position,
       executionDate: dividend.payable_date, 
     };
   });

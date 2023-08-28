@@ -54,6 +54,10 @@ function getSideAndPositionEffect(instruction: string): GetSideAndPositionEffect
   return conversionMap[instruction]; // BUY, SELL, EXCHANGE will be undefined and everything else that are not defined here
 }
 
+function getTransactionFee(fees: { fees: Record<string, number>}): number{
+  return fees ? Object.values(fees).reduce((acc: number, fee: any) => acc + fee, 0) : 0;
+}
+
 export function dataTransform(fetchedData: any): Data {
   // console.log({fetchedData})
 
@@ -62,13 +66,27 @@ export function dataTransform(fetchedData: any): Data {
   let dividends: Dividend[] = [];
 
   let transactionFeeDictionary: Record<string, number> = {}
+  // console.log(fetchedData)
 
-  // Get transaction fees
   fetchedData.data?.transactions?.forEach((transaction: any) => {
+    // Get transaction fees
     if(transaction.type === 'TRADE') {
-      const transectionFee = Object.values(transaction.fees).reduce((acc: number, fee: any) => acc + fee, 0);
+      const transactionFee = getTransactionFee(transaction.fees)
       const orderId = transaction.orderId;
-      transactionFeeDictionary[orderId] = transectionFee;
+      transactionFeeDictionary[orderId] = transactionFee;
+    
+    // Get dividends
+    } else if (transaction.type === 'DIVIDEND_OR_INTEREST') {
+      
+      // TODO: get the fee for the dividend transaction
+      const transactionFee = getTransactionFee(transaction.fees);
+      dividends.push({
+        id: transaction.transactionId,
+        symbol: transaction.transactionItem.instrument.symbol + ' ' + transaction.description,
+        amount: transaction.netAmount - transactionFee,
+        executionDate: transaction.transactionDate,
+      })
+      
     }
   });
 
@@ -139,15 +157,6 @@ export function dataTransform(fetchedData: any): Data {
         })
       }
 
-    } else if (order.orderLegCollection[0].orderLegType === 'DIVIDEND_OR_INTEREST') {
-      
-      dividends.push({
-        id: order.orderId,
-        symbol: order.transactionItem.instrument.symbol + ' ' + order.description,
-        amount: order.netAmount ?? order.transactionItem.amount,
-        executionDate: order.orderDate,
-      })
-      
     }
   });
 

@@ -1,6 +1,6 @@
 import { BROKERAGES_VARS } from "..";
 import { Brokerages } from "../../consts/brokerages";
-import { localFetchedDataName, localRefreshTokenName } from "../../consts/local-storage-var";
+import { localAuthTokenName, localFetchedDataName, localRefreshTokenName } from "../../consts/local-storage-var";
 import { requestHeaders } from "../../helpers/request-headers";
 
 
@@ -56,13 +56,15 @@ async function getNewAccessToken(): Promise<string | undefined> {
       }
 
       const data = await response.json();
+      
       return `${data.token_type} ${data.access_token}`;
+
     } catch (error) {
       console.error('Error fetching getNewAccessToken:', error);
     }
   }
 
-  throw new Error(`Failed to get access token after ${MAX_GET_ACCESS_TOKEN_RETRIES} retries`);
+  throw new Error(`Failed to get access token after ${MAX_GET_ACCESS_TOKEN_RETRIES} retries(Sorry, re-login is required).`);
 }
 
 async function fetchData(authToken: string, endpoint: string, retryCount: number = 0): Promise<any> {

@@ -47,7 +47,7 @@ export function Popup(): JSX.Element {
       }
 
       {isCurrentBrokerageSupported && currentBrokerage && !syncErrorMessage && 
-        <p className="text-xs italic my-1">{timeSynced ? 'Last synced at ' + moment(timeSynced).format('MMM Do YYYY, hh:mm:ss A') : 'Click Sync data button to get your first report!'}</p>
+        <p className="text-xs italic my-1">{timeSynced ? 'Last synced at ' + moment(timeSynced).format('MMM Do YYYY, hh:mm:ss A') : 'Click Sync data button to get your report!'}</p>
       }
     </main>
   );
