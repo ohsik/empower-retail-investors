@@ -120,7 +120,7 @@ export function dataTransform(fetchedData: any): Data {
         
         // Extracting strike price
         function extractStrikePrice(optionString: string): string | null {
-          const regex = /_[0-9]{6}(?:C|P)?(\d|\.\d)?/;
+          const regex = /_[0-9]{6}(?:C|P)?(\.\d+|\d+)/;
           const match = optionString.match(regex);
           return match ? match[1] : null;
         }
