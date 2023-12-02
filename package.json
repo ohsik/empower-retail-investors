@@ -7,7 +7,7 @@
     "dev": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
-  "author": "",
+  "author": "Allspectives",
   "license": "ISC",
   "keywords": [],
   "dependencies": {

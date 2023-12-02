@@ -10,7 +10,7 @@ const currentBrokerage = getCurrentBrokerageFromURL(currentUrl);
   📣 Use this if the brokerage does authToken in the session/local storage.
 */
 if(currentBrokerage === 'thinkorswim') {
-  const authToken = sessionStorage.getItem('authToken');
+  const authToken = sessionStorage.getItem('token');
   const refreshToken = sessionStorage.getItem('refreshToken');
 
   if(authToken) {

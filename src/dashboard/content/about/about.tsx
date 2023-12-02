@@ -11,7 +11,7 @@ export function About(): JSX.Element {
       <h2 className='text-xl my-4 font-bold'>Currently supported brokerage:</h2>
       <ul className='list-disc list-inside'>
         <li>Robinhood <i>(Fully supported)</i></li>
-        <li>Thinkorswim <i>(Stocks, Options, and Dividend are supported)</i></li>
+        <li>Thinkorswim <i>(Not supported due to tdameritrade API restriction)</i></li>
         <li>Charles Schwab <i>(Coming soon)</i></li>
         <li>Webull <i>(Coming soon)</i></li>
         <li>E-Trade <i>(Coming soon)</i></li>
@@ -28,10 +28,10 @@ export function About(): JSX.Element {
         <li>D3</li>
       </ul>
 
-      <p className='my-8'><a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo for Empower Retail Investors</a> will probably be public eventually as we get more contributors.<br />(current team: 🤖 ChatGPT and 😼 I)
+      <p className='my-8'>Empower Retail Investors is an open source project. Check out the <a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo.</a><br />
       </p>
 
-      <p>Current version: v0.0.14</p>
+      <p>Current version: v0.0.15</p>
 
       <h2 className='text-xl my-4 font-bold'>Upcoming:</h2>
       <ul className='list-disc list-inside'>
