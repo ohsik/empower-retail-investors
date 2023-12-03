@@ -3,6 +3,8 @@
 # 🚀 Empower retail investors
 Empowering retail investors by providing them with the right tools is crucial for enabling their participation and success in financial markets.
 
+**Chrome web store:** https://chromewebstore.google.com/detail/empower-retail-investors/jaaadkebnilhpenhmljnbegnfcpdgghk
+
 ## How it works
 1. Chrome extension popup will sync data from your trading brokerages
 2. Trading data will be saved in chrome storage
