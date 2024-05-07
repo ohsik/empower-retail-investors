@@ -55,17 +55,17 @@ export function TableControl({ showTable, data, showHide }: TableControlProps): 
     <div className="text-right text-xs grid grid-cols-[1fr,250px,14px,130px,60px] justify-end items-center my-4">
       {/* This is BETA experiment */}
       <div className="opacity-50">
-        {isWithinAIQuestionLimit && `🤖 Ask AI to analyze selected trading data(BETA): `}
+        {/* {isWithinAIQuestionLimit && `🤖 Ask AI to analyze selected trading data(BETA): `} */}
       </div>
 
       <ul className="list-none opacity-50">
-        {isWithinAIQuestionLimit &&
+        {/* {isWithinAIQuestionLimit &&
         <>
           <li className="inline-block mx-1"><button onClick={() => openAITab(`chatgpt`)} className="border rounded-3xl px-4 py-[4px] font-semibold border-primary">ChatGPT</button></li>
           <li className="inline-block mx-1"><button onClick={() => openAITab(`claude`)} className="border rounded-3xl px-4 py-[4px] font-semibold border-primary">Claude</button></li>
           <li className="inline-block mx-1"><button onClick={() => openAITab(`bard`)} className="border rounded-3xl px-4 py-[4px] font-semibold border-primary">Bard</button></li>
         </>
-        }
+        } */}
       </ul>
 
       <SlashDivider />
@@ -76,7 +76,7 @@ export function TableControl({ showTable, data, showHide }: TableControlProps): 
         </CSVLink>
       }
 
-      <button onClick={showHide} className="border rounded-3xl px-4 text-lg">{showTable ? '🙈' : '🙉'}</button>
+      <button onClick={showHide} className="border rounded-3xl px-4 text-lg">{showTable ? '🙉' : '🙈'}</button>
     </div>
   )
 };
