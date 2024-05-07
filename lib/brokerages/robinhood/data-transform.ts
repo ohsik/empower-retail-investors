@@ -40,6 +40,20 @@ export function dataTransform(fetchedData: any): Data {
   .filter((order: { state: string }) => !EXCLUDED_DATA.includes(order.state))
   .map((option: any) => {
     const executionDate = option.legs[0].executions[option.legs[0].executions.length - 1]?.timestamp ?? option.updated_at;
+
+    // TODO: double check if this is the correct execution price
+    function calculateAverages(executions: any[]) {
+      const total = executions.reduce((acc, item) => {
+        acc.totalPrice += parseFloat(item.price) * parseFloat(item.quantity);
+        acc.totalQuantity += parseFloat(item.quantity);
+        return acc;
+      }, { totalPrice: 0, totalQuantity: 0 });
+
+      const totalQuantity = total.totalQuantity;
+      const totalAvgPrice = total.totalPrice / totalQuantity;
+      return { totalQuantity, totalAvgPrice };
+    }
+
     const legs = option.legs.map((leg: any) => {
       return {
         optionType: leg.option_type,
@@ -47,13 +61,14 @@ export function dataTransform(fetchedData: any): Data {
         side: leg.side,
         strikePrice: convertStringToNumber(leg.strike_price),
         expirationDate: leg.expiration_date,
-        quantity: convertStringToNumber(option.quantity), // TODO: get actual quantity from each leg executions
-        executionPrice: convertStringToNumber(option.price) // TODO: probably need a function to get avg execution price from [let.executions[0].price and let.executions[0].quantity]
+        quantity: calculateAverages(leg.executions).totalQuantity,
+        executionPrice: calculateAverages(leg.executions).totalAvgPrice
       };
     });
 
     const price = convertStringToNumber(option.price);
     const quantity = convertStringToNumber(option.quantity);
+
     return { 
       id: option.id,
       symbol: option.chain_symbol,
