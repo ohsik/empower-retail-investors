@@ -9,7 +9,6 @@ export interface Option {
   premium: number;
   executionDate: string;
   legs: Leg[];
-  underlyingPrice?: number
   profitOrLoss?: number;
 }
 

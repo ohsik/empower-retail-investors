@@ -153,7 +153,6 @@ export function dataTransform(fetchedData: any): Data {
           premium: orderPrice * 100,
           executionDate: order.closeTime,
           legs: legs,
-          underlyingPrice: undefined,
         })
       }
 

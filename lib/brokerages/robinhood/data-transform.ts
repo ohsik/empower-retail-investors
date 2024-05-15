@@ -80,7 +80,6 @@ export function dataTransform(fetchedData: any): Data {
       premium: convertStringToNumber(option.premium),
       executionDate: executionDate,
       legs: legs,
-      underlyingPrice: option.underlying_price ? convertStringToNumber(option.underlying_price) : undefined,
     };
   });
 
