@@ -17,19 +17,22 @@ export function TableControl({ showTable, data, showHide }: TableControlProps): 
 
   const currentRoute = location.pathname;
   const tradingType = sidebarMenu.find((item) => item.url === currentRoute)?.name as keyof Data;
+  const tradingTypeKey = sidebarMenu.find((item) => item.url === currentRoute)?.key as keyof Data;
 
   // Convert legs object to string for CVS download
   function convertLegsObjToString(data: any): any {
-    data.forEach((option: any, index: number) => {
+    const dataCloned = structuredClone(data);
+
+    dataCloned.forEach((option: any, index: number) => {
       option.legs.forEach((leg: any, legIndex: number) => {
         const legName = `leg${legIndex + 1}`;
-        data[index][legName] = JSON.stringify(leg).replaceAll(',', ' | ');
+        dataCloned[index][legName] = JSON.stringify(leg).replaceAll(',', ' | ');
       });
 
       delete option.legs;
     });
 
-    return data
+    return dataCloned
   }
 
   return (
@@ -38,7 +41,7 @@ export function TableControl({ showTable, data, showHide }: TableControlProps): 
       </div>
 
       {data && 
-        <CSVLink data={convertLegsObjToString(data)} filename={`${tradingType} - ${selectedBrokerage} - ${selectedTimeDuration} - Empower Retail Investors`}>
+        <CSVLink data={tradingTypeKey === `options` ? convertLegsObjToString(data) : data} filename={`${tradingType} - ${selectedBrokerage} - ${selectedTimeDuration} - Empower Retail Investors`}>
           <span className="mr-2 border rounded-3xl px-4 py-[5px]">Download CSV</span>
         </CSVLink>
       }

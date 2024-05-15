@@ -40,7 +40,7 @@ export function Table({ data }: TableProps): JSX.Element {
                 <tr className={`border-b ${trade.profitOrLoss && (trade.profitOrLoss === 0 ? `bg-[inherit]` : (trade.profitOrLoss > 0 ? `bg-[#22c55d]/[.06]` : `bg-[#ef4444]/[.06]`))} dark:border-zinc-800`} key={trade.id} id={trade.id}>
                   <td className="px-4 py-5">
                     {
-                      trade.legs.map((leg, index) => {
+                      trade.legs?.map((leg, index) => {
                         return (
                           <p key={index}>
                             <b>{trade.symbol}</b> <span className="text-xs"><SlashDivider /> {toUSD(leg.strikePrice)} {leg.optionType} {formatDate(leg.expirationDate)} <SlashDivider /> {leg.side} to {leg.positionEffect}</span>
