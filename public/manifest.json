@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "0.0.16",
+  "version": "0.0.17",
   "name": "Empower retail investors",
   "description": "Empowering retail investors by providing the right tools to enable their participation and success in financial markets.",
 	"permissions": ["webRequest", "storage", "unlimitedStorage", "tabs"],
