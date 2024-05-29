@@ -14,8 +14,8 @@ export function dataTransform(fetchedData: any): Data {
   // console.log({fetchedData})
   // TODO: decide if we want to exclude cancelled, canceled, failed, voided, deleted orders
   // or keep it but exclude on Profit/Loss calculation
-  const INCLUDE_DATA = ["filled"];
-  const EXCLUDED_DATA = ['cancelled', 'canceled', 'failed', 'voided', 'deleted'];
+  const INCLUDE_DATA = ["filled", "partially_filled"];
+  const EXCLUDED_DATA = ['cancelled', 'canceled', 'failed', 'voided', 'deleted', 'confirmed'];
 
   // Stocks data transformation
   const stocks: Stock[] = fetchedData.data.orders.results
@@ -37,7 +37,7 @@ export function dataTransform(fetchedData: any): Data {
 
   // Options data transformation
   const options: Option[] = fetchedData.data.options.results
-  .filter((order: { state: string }) => !EXCLUDED_DATA.includes(order.state))
+  .filter((order: { state: string }) => INCLUDE_DATA.includes(order.state))
   .map((option: any) => {
     const executionDate = option.legs[0].executions[option.legs[0].executions.length - 1]?.timestamp ?? option.updated_at;
 

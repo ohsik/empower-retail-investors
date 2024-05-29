@@ -1,0 +1,53 @@
+name: Build and Publish Empower Retail Investors Chrome Extension
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the app
+        run: npm run build
+
+      - name: Zip the dist folder
+        run: zip -r extension.zip build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: extension
+          path: extension.zip
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: extension
+
+      - name: Publish to Chrome Web Store
+        uses: google-github-actions/deploy-chrome-extension@v1
+        with: 
+          app_id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client_id: ${{ secrets.CHROME_CLIENT_ID }}
+          client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          zip: extension.zip
