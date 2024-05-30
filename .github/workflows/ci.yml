@@ -43,14 +43,19 @@ jobs:
         with:
           name: extension
 
-      - name: Set up Chrome Web Store
-        uses: fregante/setup-chrome-webstore@v2
-
-      - name: Publish to Chrome Web Store
-        uses: fregante/chrome-webstore-upload@v3
-        with: 
-          app_id: ${{ secrets.CHROME_EXTENSION_ID }}
-          client_id: ${{ secrets.CHROME_CLIENT_ID }}
-          client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}
-          refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          zip: extension.zip
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+  
+      - name: Install chrome-webstore-upload-cli
+        run: npm install -g chrome-webstore-upload-cli
+    
+      - name: Upload to Chrome Web Store
+        run: |
+            chrome-webstore-upload upload \
+              --source extension.zip \
+              --extension-id ${{ secrets.CHROME_EXTENSION_ID }} \
+              --client-id ${{ secrets.CHROME_CLIENT_ID }} \
+              --client-secret ${{ secrets.CHROME_CLIENT_SECRET }} \
+              --refresh-token ${{ secrets.CHROME_REFRESH_TOKEN }}
