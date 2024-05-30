@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Zip the dist folder
-        run: zip -r extension.zip build
+        run: zip -r extension.zip dist
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v2
