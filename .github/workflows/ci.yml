@@ -43,8 +43,11 @@ jobs:
         with:
           name: extension
 
+      - name: Set up Chrome Web Store
+        uses: fregante/setup-chrome-webstore@v2
+
       - name: Publish to Chrome Web Store
-        uses: google-github-actions/deploy-chrome-extension@v1
+        uses: fregante/chrome-webstore-upload@v3
         with: 
           app_id: ${{ secrets.CHROME_EXTENSION_ID }}
           client_id: ${{ secrets.CHROME_CLIENT_ID }}
