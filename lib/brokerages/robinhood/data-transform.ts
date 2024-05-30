@@ -76,7 +76,7 @@ export function dataTransform(fetchedData: any): Data {
       quantity: quantity,
       amount: price * (quantity * 100),
       direction: option.direction,
-      fees: 0,
+      fees: convertStringToNumber(option.regulatory_fees),
       premium: convertStringToNumber(option.premium),
       executionDate: executionDate,
       legs: legs,
