@@ -55,8 +55,18 @@ export function stocksProfitLossCalculator(stocks: Stock[]): Stock[] {
         let tradePL = 0
 
         // calculate P/L
-        const diffPrice = orderExecutionPrice - holdings[stockSymbol].avgPrice
-        tradePL = diffPrice * orderQuantity
+
+        // TODO: this calculation is off by a bit. Find out why.
+        if(order.corpEvent) {
+          const preSplitPrice = order.corpEvent.direction === 'reverse' ? orderExecutionPrice / order.corpEvent.divisor : orderExecutionPrice * order.corpEvent.divisor
+          const preSplitQuantity = order.corpEvent.direction === 'reverse' ? orderQuantity * order.corpEvent.divisor : orderQuantity / order.corpEvent.divisor
+
+          const diffPrice = preSplitPrice - holdings[stockSymbol].avgPrice
+          tradePL = diffPrice * preSplitQuantity
+        } else {
+          const diffPrice = orderExecutionPrice - holdings[stockSymbol].avgPrice
+          tradePL = diffPrice * orderQuantity
+        }
 
         if(newQuantity === 0) {
           holdings[stockSymbol].avgPrice = 0

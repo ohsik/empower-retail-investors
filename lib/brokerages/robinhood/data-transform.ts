@@ -2,7 +2,8 @@ import { convertStringToNumber } from "../../helpers/string-to-number";
 import { cryptoProfitLossCalculator } from "../../profit-loss-calculator/crypto";
 import { optionsProfitLossCalculator } from "../../profit-loss-calculator/options";
 import { stocksProfitLossCalculator } from "../../profit-loss-calculator/stocks";
-import { Data, Stock, Option, Crypto, Dividend, Fee } from "../../types";
+import { Data, Stock, Option, Crypto, Dividend, Fee, CorpAction } from "../../types";
+import { getSymbols } from "./helpers/get-symbol";
 
 /*
   fetchedData is Robinhood's data
@@ -17,47 +18,80 @@ export function dataTransform(fetchedData: any): Data {
   const INCLUDE_DATA = ["filled", "partially_filled"];
   const EXCLUDED_DATA = ['cancelled', 'canceled', 'failed', 'voided', 'deleted', 'confirmed'];
 
+  // Get sorporate actions
+  // TODO: convert this to map that I can use has instead of "corpActions.find" below
+  const corpActions: CorpAction[] = fetchedData.data.corp_actions.results
+  .map((action: any) => {
+    return {
+      direction: action.split.direction,
+      divisor: convertStringToNumber(action.split.divisor),
+      effective_date: action.split.effective_date,
+      multiplier: convertStringToNumber(action.split.multiplier),
+      new_instrument_id: action.split.new_instrument_id,
+      old_instrument_id: action.split.old_instrument_id,
+    }
+  })
+
   // Get option contracts that are exercised or assigned
   const optionsConvertedToStocks: Stock[] = fetchedData.data.options_events.results
   .filter((option: any) => (option.type === 'exercise' || option.type === 'assignment') )
   .flatMap((stock: any) => {
     return stock.equity_components.map((equilty: any) => {
+      const symbol = equilty.symbol ?? equilty.instrument;
       const price = convertStringToNumber(equilty.price);
       const quantity = convertStringToNumber(equilty.quantity);
       const fees = convertStringToNumber(stock.fees);
-
-      return { 
-        id: stock.id,
-        symbol: equilty.symbol ?? equilty.instrument,
-        price: price,
-        quantity: quantity,
-        amount: price * quantity,
-        fees: fees,
-        side: equilty.side,
-        executionDate: stock.updated_at,
+      const optionEvent = {
+        type: stock.type,
       }
+      const executionDate = stock.updated_at;
+      const instrument_id = equilty.instrument.replace("https://api.robinhood.com/instruments/", "").replace("/", "");
+
+      const corpEvent = corpActions.find((action: any) => (action.new_instrument_id === instrument_id || action.old_instrument_id === instrument_id) && executionDate > action.effective_date);
+
+      const newStock = {
+        id: stock.id,
+        symbol,
+        price,
+        quantity,
+        amount: price * quantity,
+        fees,
+        side: 'buy',
+        executionDate,
+        instrument_id,
+        optionEvent,
+      }
+
+      return corpEvent ? {...newStock, corpEvent} : newStock;
     })
   });
-
 
   // Stocks data transformation
   const stocks: Stock[] = fetchedData.data.orders.results
   .filter((stock: any) => INCLUDE_DATA.includes(stock.state))
   .map((stock: any) => {
+    const symbol = stock.symbol ?? stock.instrument;
     const price = convertStringToNumber(stock.average_price ?? stock.price);
     const quantity = convertStringToNumber(stock.quantity);
     const fees = convertStringToNumber(stock.fees);
+    const executionDate = stock.updated_at;
+    const instrument_id = stock.instrument_id;
 
-    return { 
+    const corpEvent = corpActions.find((action: any) => (action.new_instrument_id === instrument_id || action.old_instrument_id === instrument_id) && executionDate > action.effective_date);
+
+    const newStock = {
       id: stock.id,
-      symbol: stock.symbol ?? stock.instrument,
-      price: price,
-      quantity: quantity,
+      symbol,
+      price,
+      quantity,
       amount: price * quantity,
-      fees: fees,
+      fees,
       side: stock.side,
-      executionDate: stock.updated_at,
+      executionDate,
+      instrument_id,
     }
+
+    return corpEvent ? {...newStock, corpEvent} : newStock;
   });
 
   // Combine stocks and options(assigned/exercised) and sort by executionDate
@@ -100,14 +134,14 @@ export function dataTransform(fetchedData: any): Data {
     return { 
       id: option.id,
       symbol: option.chain_symbol,
-      price: price,
-      quantity: quantity,
+      price,
+      quantity,
       amount: price * (quantity * 100),
       direction: option.direction,
       fees: convertStringToNumber(option.regulatory_fees),
       premium: convertStringToNumber(option.premium),
       executionDate: executionDate,
-      legs: legs,
+      legs,
     };
   });
 
@@ -123,8 +157,8 @@ export function dataTransform(fetchedData: any): Data {
     return {
       id: crypto.id,
       symbol: symbol.symbol ?? crypto.currency_pair_id,
-      price: price,
-      quantity: quantity,
+      price,
+      quantity,
       amount: price * quantity,
       fees: 0,
       side: crypto.side,
