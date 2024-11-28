@@ -17,23 +17,51 @@ export function dataTransform(fetchedData: any): Data {
   const INCLUDE_DATA = ["filled", "partially_filled"];
   const EXCLUDED_DATA = ['cancelled', 'canceled', 'failed', 'voided', 'deleted', 'confirmed'];
 
+  // Get option contracts that are exercised or assigned
+  const optionsConvertedToStocks: Stock[] = fetchedData.data.options_events.results
+  .filter((option: any) => (option.type === 'exercise' || option.type === 'assignment') )
+  .flatMap((stock: any) => {
+    return stock.equity_components.map((equilty: any) => {
+      const price = convertStringToNumber(equilty.price);
+      const quantity = convertStringToNumber(equilty.quantity);
+      const fees = convertStringToNumber(stock.fees);
+
+      return { 
+        id: stock.id,
+        symbol: equilty.symbol ?? equilty.instrument,
+        price: price,
+        quantity: quantity,
+        amount: price * quantity,
+        fees: fees,
+        side: equilty.side,
+        executionDate: stock.updated_at,
+      }
+    })
+  });
+
+
   // Stocks data transformation
   const stocks: Stock[] = fetchedData.data.orders.results
   .filter((stock: any) => INCLUDE_DATA.includes(stock.state))
   .map((stock: any) => {
     const price = convertStringToNumber(stock.average_price ?? stock.price);
     const quantity = convertStringToNumber(stock.quantity);
+    const fees = convertStringToNumber(stock.fees);
+
     return { 
       id: stock.id,
       symbol: stock.symbol ?? stock.instrument,
       price: price,
       quantity: quantity,
       amount: price * quantity,
-      fees: stock.fees,
+      fees: fees,
       side: stock.side,
       executionDate: stock.updated_at,
     }
   });
+
+  // Combine stocks and options(assigned/exercised) and sort by executionDate
+  const stocksWithOptions = [...stocks, ...optionsConvertedToStocks].sort((a, b) => new Date(b.executionDate).getTime() - new Date(a.executionDate).getTime());
 
   // Options data transformation
   const options: Option[] = fetchedData.data.options.results
@@ -140,7 +168,7 @@ export function dataTransform(fetchedData: any): Data {
   /*
     Adding ProfitOrLoss on Stocks, Options, and Crypto
   */
-  const stocksWithProfitOrLoss = stocksProfitLossCalculator(stocks);
+  const stocksWithProfitOrLoss = stocksProfitLossCalculator(stocksWithOptions);
   const optionsWithProfitOrLoss = optionsProfitLossCalculator(options);
   const cryptoWithProfitOrLoss = cryptoProfitLossCalculator(crypto);
 
