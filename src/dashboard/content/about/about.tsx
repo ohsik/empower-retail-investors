@@ -31,7 +31,7 @@ export function About(): JSX.Element {
       <p className='my-8'>Empower Retail Investors is an open source project. Check out the <a className='underline' href="https://github.com/ohsik/empower-retail-investors" target='_blank'>Github repo.</a><br />
       </p>
 
-      <p>Current version: v 0.0.19</p>
+      <p>Current version: v 0.0.20</p>
 
       <h2 className='text-xl my-4 font-bold'>Upcoming:</h2>
       <ul className='list-disc list-inside'>
