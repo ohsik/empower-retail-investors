@@ -56,7 +56,7 @@ export function dataTransform(fetchedData: any): Data {
         quantity,
         amount: price * quantity,
         fees,
-        side: 'buy',
+        side: equilty.side,
         executionDate,
         instrument_id,
         optionEvent,
